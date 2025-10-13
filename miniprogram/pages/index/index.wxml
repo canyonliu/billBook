@@ -1,0 +1,26 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <view class="deck-list" wx:if="{{decks.length > 0}}">
+    <view class="deck-item" wx:for="{{decks}}" wx:key="id">
+      <view class="deck-content" data-id="{{item.id}}" bind:tap="navigateToStudy">
+        <view class="deck-name">{{item.name}}</view>
+        <view class="deck-info">{{item.cards.length}} 张卡片</view>
+      </view>
+      <view class="deck-actions">
+        <van-icon name="edit" custom-class="action-icon" data-id="{{item.id}}" catch:tap="navigateToEdit" />
+        <van-icon name="delete-o" custom-class="action-icon danger" data-id="{{item.id}}" catch:tap="showDeleteModal" />
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <van-icon name="inbox-o" size="50px" color="#bdc3c7" />
+    <text class="empty-text">还没有卡片集</text>
+    <text class="empty-tip">点击下方按钮创建一个吧！</text>
+  </view>
+
+  <button class="add-btn" bind:tap="navigateToAdd">
+    <van-icon name="plus" color="#fff" custom-class="add-btn-icon"/>
+    <text>创建新卡片集</text>
+  </button>
+</view>

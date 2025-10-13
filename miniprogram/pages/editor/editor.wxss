@@ -1,0 +1,120 @@
+/* pages/editor/editor.wxss */
+.container {
+  padding: 30rpx 30rpx 160rpx; /* Leave space for the fixed save button */
+  box-sizing: border-box;
+}
+
+.form-wrapper {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 40rpx;
+}
+
+label {
+  display: block;
+  margin-bottom: 15rpx;
+  color: #2c3e50;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+input {
+  border: none;
+  border-bottom: 2rpx solid #ecf0f1;
+  padding: 20rpx 0;
+  font-size: 32rpx;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  border-bottom-color: #6B59CC;
+}
+
+.divider {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 30rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 2rpx solid #ecf0f1;
+}
+
+.cards-list {
+  margin-bottom: 30rpx;
+}
+
+.card-editor-item {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  border: 1rpx solid #ecf0f1;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.delete-card-icon {
+  font-size: 44rpx !important;
+}
+
+.card-body textarea {
+  width: 100%;
+  height: 150rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  border: 1rpx solid #ecf0f1;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  background-color: #f9fafb;
+  line-height: 1.5;
+}
+
+.card-body textarea:first-child {
+  margin-bottom: 20rpx;
+}
+
+.add-card-btn-main {
+  width: 100%;
+  height: 90rpx;
+  background-color: #fff;
+  color: #6B59CC;
+  border: 1rpx dashed #bdc3c7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+}
+
+.add-card-btn-icon {
+  margin-right: 15rpx;
+}
+
+.save-btn {
+  position: fixed;
+  bottom: 30rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 700rpx;
+  height: 96rpx;
+  background-color: #6B59CC;
+  color: white;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  box-shadow: 0 8rpx 25rpx rgba(107, 89, 204, 0.45);
+}

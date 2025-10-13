@@ -27,6 +27,7 @@
   "libVersion": "2.8.0",
   "appid": "touristappid",
   "projectname": "flashcard-memo",
+  "miniprogramRoot": "miniprogram/",
   "debugOptions": {
     "hidedInDevtools": []
   },

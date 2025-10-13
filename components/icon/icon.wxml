@@ -1,2 +1,0 @@
-<!-- components/icon/icon.wxml -->
-<image src="/images/icons/{{name}}.svg" style="font-size: {{fontSize}};" class="icon-image {{customClass}}" mode="aspectFit" />

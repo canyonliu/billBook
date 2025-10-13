@@ -1,0 +1,99 @@
+/* pages/index/index.wxss */
+.container {
+  padding: 20rpx 20rpx 180rpx;
+}
+
+/* Deck List */
+.deck-item {
+  background-color: #fff;
+  padding: 40rpx 30rpx;
+  margin-bottom: 25rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 25rpx rgba(0,0,0,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.deck-item:active {
+  transform: scale(0.97);
+}
+
+.deck-content {
+  flex-grow: 1;
+}
+
+.deck-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 5rpx;
+}
+
+.deck-info {
+  font-size: 26rpx;
+  color: #7f8c8d;
+}
+
+.deck-actions {
+  display: flex;
+  align-items: center;
+}
+
+.action-icon {
+  font-size: 44rpx !important; /* Use !important to override Vant default size */
+  padding: 10rpx;
+  margin-left: 25rpx;
+  color: #7f8c8d;
+}
+
+.action-icon.danger {
+  color: #e74c3c;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 150rpx;
+  color: #999;
+}
+
+.empty-state .van-icon {
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  margin-bottom: 10rpx;
+}
+
+.empty-tip {
+  font-size: 26rpx;
+}
+
+/* Add Button */
+.add-btn {
+  position: fixed;
+  bottom: 50rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 600rpx;
+  height: 96rpx;
+  background-color: #6B59CC;
+  color: white;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  box-shadow: 0 8rpx 25rpx rgba(107, 89, 204, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-btn-icon {
+  margin-right: 15rpx;
+}
