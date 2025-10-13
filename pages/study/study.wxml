@@ -1,0 +1,54 @@
+<!--pages/study/study.wxml-->
+<view class="container">
+  <block wx:if="{{deck}}">
+    <!-- Main Study Area -->
+    <view class="study-area" wx:if="{{deck.cards.length > 0}}">
+      <!-- Progress Indicator -->
+      <view class="progress">{{currentIndex + 1}} / {{deck.cards.length}}</view>
+
+      <!-- Card Container -->
+      <view class="card-container" bind:tap="flipCard">
+        <view class="card-content {{isFlipped ? 'is-flipped' : ''}}">
+          <!-- Front Face -->
+          <view class="card-face card-front">
+            <text>{{deck.cards[currentIndex].front}}</text>
+          </view>
+          <!-- Back Face -->
+          <view class="card-face card-back">
+            <text>{{deck.cards[currentIndex].back}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Action Buttons -->
+      <view class="actions">
+        <button class="action-btn prev-btn" bind:tap="prevCard" disabled="{{currentIndex === 0}}">
+          <icon name="arrow-left" customClass="nav-icon" fontSize="50rpx" />
+        </button>
+        <button class="action-btn flip-btn" bind:tap="flipCard">
+          <icon name="replay" customClass="flip-icon" fontSize="70rpx" />
+        </button>
+        <button class="action-btn next-btn" bind:tap="nextCard" disabled="{{currentIndex === deck.cards.length - 1}}">
+          <icon name="arrow-right" customClass="nav-icon" fontSize="50rpx" />
+        </button>
+      </view>
+    </view>
+
+    <!-- Empty State for Deck -->
+    <view class="empty-state" wx:else>
+      <icon name="add-o" customClass="empty-icon" fontSize="80rpx" />
+      <text class="empty-text">这个卡片集是空的</text>
+      <text class="empty-tip">快去添加一些卡片吧！</text>
+      <button class="add-card-btn" bind:tap="navigateToAddCard">
+        <icon name="add" customClass="add-card-btn-icon" fontSize="36rpx" />
+        <text>添加第一张卡片</text>
+      </button>
+    </view>
+
+  </block>
+
+  <!-- Loading State -->
+  <view wx:else>
+    <text>加载中...</text>
+  </view>
+</view>

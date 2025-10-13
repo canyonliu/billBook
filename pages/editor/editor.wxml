@@ -1,0 +1,37 @@
+<!--pages/editor/editor.wxml-->
+<view class="container">
+  <view class="form-wrapper">
+    <!-- Deck Name Input -->
+    <view class="form-group">
+      <label for="deckName">卡片集名称</label>
+      <input id="deckName" value="{{deckName}}" bind:input="onDeckNameInput" placeholder="例如：前端高频面试题" />
+    </view>
+
+    <!-- Divider -->
+    <view class="divider">卡片列表</view>
+
+    <!-- Cards List -->
+    <view class="cards-list">
+      <view class="card-editor-item" wx:for="{{cards}}" wx:key="id">
+        <view class="card-header">
+          <view class="card-title">卡片 {{index + 1}}</view>
+          <icon name="trash" fontSize="40rpx" customClass="delete-card-icon" bind:tap="removeCard" data-id="{{item.id}}" />
+        </view>
+        <view class="card-body">
+          <textarea class="card-input" placeholder="输入正面内容..." value="{{item.front}}" data-id="{{item.id}}" data-field="front" bind:input="onCardInput"></textarea>
+          <textarea class="card-input" placeholder="输入反面内容..." value="{{item.back}}" data-id="{{item.id}}" data-field="back" bind:input="onCardInput"></textarea>
+        </view>
+      </view>
+    </view>
+
+    <!-- Add Card Button -->
+    <button class="add-card-btn-main" bind:tap="addCard">
+      <icon name="add" fontSize="36rpx" customClass="add-card-btn-icon" />
+      <text>添加新卡片</text>
+    </button>
+
+  </view>
+
+  <!-- Save Button -->
+  <button class="save-btn" bind:tap="save">保存</button>
+</view>
