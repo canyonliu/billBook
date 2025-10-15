@@ -1,0 +1,84 @@
+<!-- pages/addTransaction/addTransaction.wxml -->
+<view class="container">
+  <view class="form-group">
+    <van-radio-group value="{{ type }}" bind:change="onTypeChange" direction="horizontal">
+      <van-radio name="expense">支出</van-radio>
+      <van-radio name="income">收入</van-radio>
+    </van-radio-group>
+  </view>
+
+  <view class="form-group amount-group">
+    <text class="currency-symbol">¥</text>
+    <van-field
+      value="{{ amount }}"
+      type="digit"
+      placeholder="0.00"
+      bind:change="onAmountChange"
+      custom-class="amount-input"
+      border="{{ false }}"
+    />
+  </view>
+
+  <van-cell-group inset>
+    <van-field
+      value="{{ description }}"
+      label="描述"
+      placeholder="点击输入描述 (可选)"
+      bind:change="onDescriptionChange"
+    />
+    <van-cell title="日期" is-link value="{{ formattedDate }}" bind:click="onDisplayDatePicker" />
+    <van-field
+      value="{{ tags }}"
+      label="标签"
+      placeholder="用逗号分隔, 如: 食物,交通"
+      bind:change="onTagsChange"
+      bind:blur="formatTags"
+    />
+  </van-cell-group>
+
+  <view class="tags-display">
+    <van-tag 
+      wx:for="{{ tagList }}" 
+      wx:key="index" 
+      type="primary" 
+      size="large" 
+      custom-class="tag-item"
+    >
+      {{ item }}
+    </van-tag>
+  </view>
+
+  <view class="form-group preset-tags-group">
+    <view class="preset-tags-title">常用标签</view>
+    <view class="tags-display">
+      <van-tag 
+        wx:for="{{ defaultTags }}" 
+        wx:key="index" 
+        plain
+        type="{{ tagList.includes(item) ? 'primary' : 'default' }}"
+        size="large" 
+        custom-class="tag-item"
+        data-tag="{{ item }}"
+        bind:tap="onSelectTag"
+      >
+        {{ item }}
+      </van-tag>
+    </view>
+  </view>
+
+  <view class="button-wrapper">
+    <van-button type="primary" block round bind:click="onSave">保 存</van-button>
+  </view>
+
+  <!-- Date Picker Popup -->
+  <van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+    <van-datetime-picker
+      type="datetime"
+      value="{{ transactionDate }}"
+      min-date="{{ minDate }}"
+      max-date="{{ maxDate }}"
+      bind:confirm="onConfirmDatePicker"
+      bind:cancel="onCancelDatePicker"
+    />
+  </van-popup>
+</view>

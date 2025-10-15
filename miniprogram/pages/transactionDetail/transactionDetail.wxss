@@ -1,0 +1,70 @@
+/* pages/transactionDetail/transactionDetail.wxss */
+.container {
+  height: 100vh;
+}
+
+/* Ensure tabs are equal width */
+.detail-tab {
+  width: 50% !important;
+}
+
+.list-container {
+  padding: 20rpx;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 25rpx;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.item-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.description {
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.tags {
+  font-size: 24rpx;
+  color: #888;
+}
+
+.item-time {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+.tags-and-time {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 10rpx;
+}
+
+.item-right {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.income {
+  color: #2ecc71;
+}
+
+.expense {
+  color: #e74c3c;
+}
+
+.van-empty {
+  padding-top: 100rpx;
+}

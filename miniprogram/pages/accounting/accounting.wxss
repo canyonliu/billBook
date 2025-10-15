@@ -1,0 +1,152 @@
+/* pages/accounting/accounting.wxss */
+.container {
+  padding: 0;
+  background-color: #f7f8fa;
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  padding: 20rpx;
+}
+
+.date-selector {
+  background-color: #fff;
+  padding: 30rpx;
+  border-radius: 16rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+  margin-bottom: 30rpx;
+}
+
+.totals-card {
+  background-color: #6B59CC;
+  padding: 40rpx;
+  border-radius: 16rpx;
+  color: white;
+  text-align: center;
+  box-shadow: 0 8rpx 25rpx rgba(107, 89, 204, 0.45);
+  margin-bottom: 30rpx;
+}
+
+.total-item {
+  margin-bottom: 20rpx;
+}
+
+.total-item:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  font-size: 28rpx;
+  opacity: 0.8;
+  display: block;
+}
+
+.value {
+  font-size: 48rpx;
+  font-weight: bold;
+  display: block;
+  margin-top: 10rpx;
+}
+
+.value.expense {
+  color: #ffda47; /* A contrasting color for expense */
+}
+
+.value.income {
+  color: #a7e9af; /* A contrasting color for income */
+}
+
+.transaction-list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+  padding: 30rpx;
+  margin-bottom: 120rpx; /* Space for fixed button */
+}
+
+.list-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eee;
+  font-size: 30rpx;
+  color: #555;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-item .item-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the start */
+  flex-grow: 1; /* Allow this to take up space */
+  margin-right: 20rpx; /* Space between left and right content */
+}
+
+.transaction-item .item-desc {
+  font-size: 30rpx;
+  color: #555;
+  margin-bottom: 10rpx; /* Space between desc and tags */
+}
+
+.tags-and-time {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.transaction-item .income {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.transaction-item .expense {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.empty-transactions {
+  text-align: center;
+  padding: 40rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.add-transaction-btn {
+  position: fixed;
+  bottom: 50rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 600rpx;
+  height: 96rpx;
+  background-color: #2ecc71; /* Green for add */
+  color: white;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  box-shadow: 0 8rpx 25rpx rgba(46, 204, 113, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-transaction-btn .van-icon {
+  margin-right: 15rpx;
+}

@@ -1,0 +1,77 @@
+/* pages/addTransaction/addTransaction.wxss */
+.container {
+  padding: 30rpx 30rpx 180rpx; /* More space for button */
+  background-color: #f7f8fa;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: 30rpx;
+  background-color: #fff;
+  padding: 30rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 16rpx rgba(0,0,0,0.04);
+}
+
+.amount-group {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+}
+
+.currency-symbol {
+  font-size: 50rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+  color: #333;
+}
+
+.amount-input {
+  font-size: 72rpx !important;
+  font-weight: bold !important;
+  height: 100rpx !important;
+  flex-grow: 1;
+  color: #333;
+}
+
+.van-cell-group--inset {
+  margin: 0 !important;
+}
+
+.van-radio--horizontal {
+  margin-right: 40rpx;
+}
+
+.preset-tags-group {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 20rpx 0 10rpx;
+}
+
+.preset-tags-title {
+  font-size: 28rpx;
+  color: #646566;
+  margin-bottom: 20rpx;
+  padding-left: 10rpx;
+}
+
+.tags-display {
+  padding: 0 10rpx;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag-item {
+  margin-right: 15rpx;
+  margin-bottom: 15rpx;
+}
+
+.button-wrapper {
+  position: fixed;
+  bottom: 50rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  z-index: 100;
+}

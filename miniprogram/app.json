@@ -3,7 +3,10 @@
     "pages/index/index",
     "pages/study/study",
     "pages/editor/editor",
-    "pages/recycleBin/recycleBin"
+    "pages/recycleBin/recycleBin",
+    "pages/accounting/accounting",
+    "pages/addTransaction/addTransaction",
+    "pages/transactionDetail/transactionDetail"
   ],
   "window":{
     "backgroundTextStyle":"light",

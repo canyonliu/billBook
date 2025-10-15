@@ -1,7 +1,7 @@
 <!--pages/index/index.wxml-->
 <view class="container">
   <!-- Menu Button -->
-  <view class="menu-button" bind:tap="onOpenSidebar">
+  <view wx:if="{{ !showSidebar }}" class="menu-button" bind:tap="onOpenSidebar">
     <van-icon name="wap-nav" size="24px" color="#6B59CC" />
   </view>
 
@@ -46,6 +46,10 @@
       <view class="menu-item" bind:tap="navigateToRecycleBinFromSidebar">
         <van-icon name="delete" size="20px" />
         <text>回收站</text>
+      </view>
+      <view class="menu-item" bind:tap="navigateToAccountingFromSidebar">
+        <van-icon name="balance-o" size="20px" />
+        <text>记账本</text>
       </view>
       <!-- Future menu items can be added here -->
     </view>

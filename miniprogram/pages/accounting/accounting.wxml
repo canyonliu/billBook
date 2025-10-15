@@ -1,0 +1,156 @@
+<!-- pages/accounting/accounting.wxml -->
+<view class="container">
+  <van-tabs active="{{ activeTab }}" bind:change="onTabChange" sticky>
+    <van-tab title="按日">
+      <view class="content-wrapper">
+        <!-- Date Selector -->
+        <view class="date-selector" bind:tap="onDisplayDatePicker">
+          <text>{{currentYear}}年{{currentMonth}}月{{currentDay}}日</text>
+          <van-icon name="arrow-down" size="16px" color="#666" />
+        </view>
+
+        <!-- Totals Display -->
+        <view class="totals-card" bind:tap="navigateToDetails">
+          <view class="total-item">
+            <text class="label">日收入</text>
+            <text class="value income">+{{totalIncome}}</text>
+          </view>
+          <view class="total-item">
+            <text class="label">日支出</text>
+            <text class="value expense">-{{totalExpense}}</text>
+          </view>
+        </view>
+
+        <!-- Transaction List -->
+        <view class="transaction-list">
+          <text class="list-title">交易明细 (本日)</text>
+          <view wx:if="{{filteredTransactions.length > 0}}">
+            <view wx:for="{{filteredTransactions}}" wx:key="id" class="transaction-item">
+              <view class="item-left">
+                <text class="item-desc">{{item.description || '无描述'}}</text>
+                <view class="tags-and-time">
+                  <van-tag plain type="primary" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</van-tag>
+                  <van-tag plain type="default">{{item.displayText}}</van-tag>
+                </view>
+              </view>
+              <text class="{{item.type}}">{{item.type === 'income' ? '+' : '-'}}{{item.amount}}</text>
+            </view>
+          </view>
+          <view wx:else class="empty-transactions">
+            <text>暂无交易记录</text>
+          </view>
+        </view>
+      </view>
+    </van-tab>
+    <van-tab title="按月">
+      <view class="content-wrapper">
+        <!-- Date Selector -->
+        <view class="date-selector" bind:tap="onDisplayDatePicker">
+          <text>{{currentYear}}年{{currentMonth}}月</text>
+          <van-icon name="arrow-down" size="16px" color="#666" />
+        </view>
+
+        <!-- Totals Display -->
+        <view class="totals-card" bind:tap="navigateToDetails">
+          <view class="total-item">
+            <text class="label">月收入</text>
+            <text class="value income">+{{totalIncome}}</text>
+          </view>
+          <view class="total-item">
+            <text class="label">月支出</text>
+            <text class="value expense">-{{totalExpense}}</text>
+          </view>
+        </view>
+
+        <!-- Transaction List -->
+        <view class="transaction-list">
+          <text class="list-title">交易明细 (本月)</text>
+          <view wx:if="{{filteredTransactions.length > 0}}">
+            <view wx:for="{{filteredTransactions}}" wx:key="id" class="transaction-item">
+              <view class="item-left">
+                <text class="item-desc">{{item.description || '无描述'}}</text>
+                <view class="tags-and-time">
+                  <van-tag plain type="primary" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</van-tag>
+                  <van-tag plain type="default">{{item.displayText}}</van-tag>
+                </view>
+              </view>
+              <text class="{{item.type}}">{{item.type === 'income' ? '+' : '-'}}{{item.amount}}</text>
+            </view>
+          </view>
+          <view wx:else class="empty-transactions">
+            <text>暂无交易记录</text>
+          </view>
+        </view>
+      </view>
+    </van-tab>
+    <van-tab title="按年">
+      <view class="content-wrapper">
+        <!-- Date Selector -->
+        <view class="date-selector" bind:tap="onDisplayDatePicker">
+          <text>{{currentYear}}年</text>
+          <van-icon name="arrow-down" size="16px" color="#666" />
+        </view>
+
+        <!-- Totals Display -->
+        <view class="totals-card" bind:tap="navigateToDetails">
+          <view class="total-item">
+            <text class="label">年收入</text>
+            <text class="value income">+{{totalIncome}}</text>
+          </view>
+          <view class="total-item">
+            <text class="label">年支出</text>
+            <text class="value expense">-{{totalExpense}}</text>
+          </view>
+        </view>
+
+        <!-- Transaction List -->
+        <view class="transaction-list">
+          <text class="list-title">交易明细 (本年)</text>
+          <view wx:if="{{filteredTransactions.length > 0}}">
+            <view wx:for="{{filteredTransactions}}" wx:key="id" class="transaction-item">
+              <view class="item-left">
+                <text class="item-desc">{{item.description || '无描述'}}</text>
+                <view class="tags-and-time">
+                  <van-tag plain type="primary" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</van-tag>
+                  <van-tag plain type="default">{{item.displayText}}</van-tag>
+                </view>
+              </view>
+              <text class="{{item.type}}">{{item.type === 'income' ? '+' : '-'}}{{item.amount}}</text>
+            </view>
+          </view>
+          <view wx:else class="empty-transactions">
+            <text>暂无交易记录</text>
+          </view>
+        </view>
+      </view>
+    </van-tab>
+  </van-tabs>
+
+  <!-- Add Transaction Button -->
+  <button class="add-transaction-btn" bind:tap="navigateToAddTransaction">
+    <van-icon name="plus" color="#fff" size="20px" />
+    <text>新增记账</text>
+  </button>
+
+  <!-- Date Picker Popup -->
+  <van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+    <van-datetime-picker
+      wx:if="{{ filterType !== 'year' }}"
+      type="{{ filterType === 'day' ? 'date' : 'year-month' }}"
+      value="{{ currentDate }}"
+      min-date="{{ minDate }}"
+      max-date="{{ maxDate }}"
+      formatter="{{ formatter }}"
+      bind:confirm="onPickerConfirm"
+      bind:cancel="onCancelDatePicker"
+    />
+    <van-picker
+      wx:else
+      show-toolbar
+      title="选择年份"
+      columns="{{ yearColumns }}"
+      bind:confirm="onPickerConfirm"
+      bind:cancel="onCancelDatePicker"
+    />
+  </van-popup>
+</view>

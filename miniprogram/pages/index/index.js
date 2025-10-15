@@ -97,6 +97,14 @@ Page({
     });
   },
 
+  navigateToAccountingFromSidebar() {
+    console.log('index.js: navigateToAccountingFromSidebar triggered');
+    this.onCloseSidebar(); // Close sidebar first
+    wx.navigateTo({
+      url: '../accounting/accounting'
+    });
+  },
+
   onSwipeCellClose(e) {
     console.log('index.js: Swipe cell closed', e.detail);
   }
