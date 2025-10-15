@@ -1,0 +1,40 @@
+/* components/custom-swipe-item/custom-swipe-item.wxss */
+.swipe-wrapper {
+  width: 100%;
+  position: relative;
+  overflow: hidden; /* This is crucial */
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  margin-bottom: 20rpx;
+}
+
+.swipe-actions {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+
+.left-actions {
+  left: 0;
+  background-color: #2ecc71; /* Green for restore */
+}
+
+.right-actions {
+  right: 0;
+  background-color: #e74c3c; /* Red for delete */
+}
+
+.swipe-content {
+  position: relative; /* To be on top of actions */
+  background-color: #fff; /* Ensure it has a background */
+  z-index: 1; /* Ensure it's above the actions */
+  border-radius: 10rpx;
+}
+
+.swipe-content.transition {
+  transition: transform 0.3s ease;
+}

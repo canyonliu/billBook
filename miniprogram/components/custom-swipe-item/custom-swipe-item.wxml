@@ -1,0 +1,18 @@
+<!-- components/custom-swipe-item/custom-swipe-item.wxml -->
+<view class="swipe-wrapper">
+  <view class="swipe-actions left-actions">
+    <slot name="left"></slot>
+  </view>
+  <view class="swipe-actions right-actions">
+    <slot name="right"></slot>
+  </view>
+  <view 
+    class="swipe-content {{isMoving ? '' : 'transition'}}"
+    style="transform: translateX({{translateX}}px);"
+    bind:touchstart="onTouchStart"
+    bind:touchmove="onTouchMove"
+    bind:touchend="onTouchEnd"
+  >
+    <slot></slot>
+  </view>
+</view>

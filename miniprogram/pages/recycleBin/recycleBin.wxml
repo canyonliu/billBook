@@ -1,0 +1,30 @@
+<!-- pages/recycleBin/recycleBin.wxml -->
+<view class="container">
+  <view class="item-list" wx:if="{{deletedDecks.length > 0}}">
+    <van-swipe-cell 
+      right-width="{{ 65 }}" 
+      left-width="{{ 65 }}" 
+      wx:for="{{deletedDecks}}" 
+      wx:key="id" 
+      data-id="{{item.id}}"
+      bind:close="onSwipeCellClose"
+      custom-class="swipe-cell-wrapper"
+    >
+      <view class="list-item-content">
+        <text>{{item.name}}</text>
+        <text class="deleted-info">已删除 {{item.deletedAtText}}</text>
+      </view>
+      <view slot="left">
+        <van-button type="primary" custom-class="restore-button" data-id="{{item.id}}" catch:tap="handleRestore">恢复</van-button>
+      </view>
+      <view slot="right">
+        <van-button type="danger" custom-class="delete-button" data-id="{{item.id}}" catch:tap="handlePermanentDelete">彻底删除</van-button>
+      </view>
+    </van-swipe-cell>
+  </view>
+  <view class="empty-state" wx:else>
+    <van-icon name="success" size="50px" color="#bdc3c7" />
+    <text class="empty-text">回收站是空的</text>
+    <text class="empty-tip">没有可恢复的卡片集</text>
+  </view>
+</view>

@@ -1,16 +1,29 @@
 <!--pages/index/index.wxml-->
 <view class="container">
+  <!-- Menu Button -->
+  <view class="menu-button" bind:tap="onOpenSidebar">
+    <van-icon name="wap-nav" size="24px" color="#6B59CC" />
+  </view>
+
   <view class="deck-list" wx:if="{{decks.length > 0}}">
-    <view class="deck-item" wx:for="{{decks}}" wx:key="id">
-      <view class="deck-content" data-id="{{item.id}}" bind:tap="navigateToStudy">
-        <view class="deck-name">{{item.name}}</view>
-        <view class="deck-info">{{item.cards.length}} 张卡片</view>
+    <van-swipe-cell right-width="{{ 100 }}" wx:for="{{decks}}" wx:key="id" data-id="{{item.id}}" bind:close="onSwipeCellClose" custom-class="swipe-cell-wrapper">
+      <view class="deck-item" bind:tap="navigateToStudy" data-id="{{item.id}}">
+        <view class="deck-content">
+          <view class="deck-name">{{item.name}}</view>
+          <view class="deck-info">{{item.cards.length}} 张卡片</view>
+        </view>
+        <view class="deck-actions">
+          <van-icon name="edit" custom-class="action-icon" data-id="{{item.id}}" catch:tap="navigateToEdit" />
+          <van-icon name="arrow" custom-class="action-icon" />
+        </view>
       </view>
-      <view class="deck-actions">
-        <van-icon name="edit" custom-class="action-icon" data-id="{{item.id}}" catch:tap="navigateToEdit" />
-        <van-icon name="delete-o" custom-class="action-icon danger" data-id="{{item.id}}" catch:tap="showDeleteModal" />
+      <view slot="right">
+        <van-button type="danger" custom-class="delete-button" data-id="{{item.id}}" catch:tap="showDeleteModal">
+          <van-icon name="delete-o" color="#fff" size="20px" />
+          <text>删除</text>
+        </van-button>
       </view>
-    </view>
+    </van-swipe-cell>
   </view>
 
   <view class="empty-state" wx:else>
@@ -23,4 +36,18 @@
     <van-icon name="plus" color="#fff" custom-class="add-btn-icon"/>
     <text>创建新卡片集</text>
   </button>
+
+  <!-- Sidebar Popup -->
+  <van-popup show="{{ showSidebar }}" position="left" custom-style="height: 100%; width: 70%;" bind:close="onCloseSidebar">
+    <view class="sidebar-header">
+      <text>导航</text>
+    </view>
+    <view class="sidebar-menu">
+      <view class="menu-item" bind:tap="navigateToRecycleBinFromSidebar">
+        <van-icon name="delete" size="20px" />
+        <text>回收站</text>
+      </view>
+      <!-- Future menu items can be added here -->
+    </view>
+  </van-popup>
 </view>

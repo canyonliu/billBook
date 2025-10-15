@@ -2,7 +2,8 @@
   "pages":[
     "pages/index/index",
     "pages/study/study",
-    "pages/editor/editor"
+    "pages/editor/editor",
+    "pages/recycleBin/recycleBin"
   ],
   "window":{
     "backgroundTextStyle":"light",
@@ -10,5 +11,6 @@
     "navigationBarTitleText": "闪卡记",
     "navigationBarTextStyle":"white"
   },
+  "style": "v2",
   "sitemapLocation": "sitemap.json"
 }
