@@ -1,32 +1,34 @@
 <!-- pages/transactionDetail/transactionDetail.wxml -->
 <view class="container">
-  <van-tabs active="{{ activeTab }}" bind:change="onTabChange" sticky tab-class="detail-tab">
+  <van-tabs active="{{ activeTab }}" bind:change="onTabChange" sticky tab-class="detail-tab" nav-class="fixed-width-nav">
     <van-tab title="支出">
       <view class="list-container" wx:if="{{ expenseTransactions.length > 0 }}">
-        <view wx:for="{{ expenseTransactions }}" wx:key="id" class="transaction-item">
-          <view class="item-left">
-            <view class="description">{{item.description || '无描述'}}</view>
+        <view wx:for="{{ expenseTransactions }}" wx:key="id" class="transaction-card">
+          <van-icon name="{{item.icon}}" size="24px" class="card-icon" />
+          <view class="card-content">
+            <text class="description">{{item.description || '无描述'}}</text>
             <view class="tags-and-time">
               <van-tag plain type="primary" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</van-tag>
-              <van-tag plain type="default">{{item.displayText}}</van-tag>
+              <van-tag plain type="default" custom-class="time-tag">{{item.displayText}}</van-tag>
             </view>
           </view>
-          <view class="item-right expense">-{{item.amount}}</view>
+          <text class="card-amount expense">-{{item.amount}}</text>
         </view>
       </view>
       <van-empty wx:else description="暂无支出记录" />
     </van-tab>
     <van-tab title="收入">
       <view class="list-container" wx:if="{{ incomeTransactions.length > 0 }}">
-        <view wx:for="{{ incomeTransactions }}" wx:key="id" class="transaction-item">
-          <view class="item-left">
-            <view class="description">{{item.description || '无描述'}}</view>
+        <view wx:for="{{ incomeTransactions }}" wx:key="id" class="transaction-card">
+          <van-icon name="{{item.icon}}" size="24px" class="card-icon" />
+          <view class="card-content">
+            <text class="description">{{item.description || '无描述'}}</text>
             <view class="tags-and-time">
               <van-tag plain type="primary" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</van-tag>
-              <van-tag plain type="default">{{item.displayText}}</van-tag>
+              <van-tag plain type="default" custom-class="time-tag">{{item.displayText}}</van-tag>
             </view>
           </view>
-          <view class="item-right income">+{{item.amount}}</view>
+          <text class="card-amount income">+{{item.amount}}</text>
         </view>
       </view>
       <van-empty wx:else description="暂无收入记录" />

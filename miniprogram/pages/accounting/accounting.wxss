@@ -55,55 +55,70 @@
 }
 
 .value.expense {
-  color: #ffda47; /* A contrasting color for expense */
+  color: #ffda47;
 }
 
 .value.income {
-  color: #a7e9af; /* A contrasting color for income */
+  color: #a7e9af;
 }
 
-.transaction-list {
-  background-color: #fff;
-  border-radius: 16rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
-  padding: 30rpx;
-  margin-bottom: 120rpx; /* Space for fixed button */
+/* New Card UI Styles */
+.transaction-group-list {
+  padding-bottom: 120rpx; /* Space for fixed button */
 }
 
-.list-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20rpx;
-  display: block;
+.transaction-group {
+  margin-bottom: 30rpx;
 }
 
-.transaction-item {
+.group-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20rpx 0;
-  border-bottom: 1rpx solid #eee;
-  font-size: 30rpx;
-  color: #555;
+  padding: 0 10rpx 15rpx;
+  font-size: 28rpx;
+  color: #969799;
 }
 
-.transaction-item:last-child {
-  border-bottom: none;
+.group-summary {
+  font-size: 26rpx;
 }
 
-.transaction-item .item-left {
+.group-summary text {
+  margin-left: 20rpx;
+}
+
+.transaction-card {
+  display: flex;
+  align-items: flex-start; /* Align to top */
+  background-color: #fff;
+  padding: 25rpx;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.card-icon {
+  margin-right: 25rpx;
+  padding: 20rpx;
+  background-color: #f7f8fa;
+  border-radius: 50%;
+  color: #6B59CC;
+}
+
+.card-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align items to the start */
-  flex-grow: 1; /* Allow this to take up space */
-  margin-right: 20rpx; /* Space between left and right content */
+  min-width: 0; /* Important for flex wrapping */
 }
 
-.transaction-item .item-desc {
+.item-desc {
   font-size: 30rpx;
-  color: #555;
-  margin-bottom: 10rpx; /* Space between desc and tags */
+  color: #323233;
+  margin-bottom: 10rpx;
+  white-space: normal; /* Allow wrapping */
+  word-break: break-all;
 }
 
 .tags-and-time {
@@ -112,14 +127,23 @@
   gap: 10rpx;
 }
 
-.transaction-item .income {
-  color: #2ecc71;
-  font-weight: bold;
+.time-tag {
+  background-color: #f2f3f5 !important;
+  color: #969799 !important;
 }
 
-.transaction-item .expense {
-  color: #e74c3c;
+.card-amount {
+  font-size: 34rpx;
   font-weight: bold;
+  margin-left: 20rpx; /* Add space */
+}
+
+.card-amount.income {
+  color: #2ecc71;
+}
+
+.card-amount.expense {
+  color: #e74c3c;
 }
 
 .empty-transactions {
@@ -137,7 +161,7 @@
   width: 80%;
   max-width: 600rpx;
   height: 96rpx;
-  background-color: #2ecc71; /* Green for add */
+  background-color: #2ecc71;
   color: white;
   border-radius: 48rpx;
   font-size: 32rpx;

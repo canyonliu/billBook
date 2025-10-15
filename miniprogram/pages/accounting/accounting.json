@@ -4,7 +4,8 @@
     "van-datetime-picker": "@vant/weapp/datetime-picker/index",
     "van-popup": "@vant/weapp/popup/index",
     "van-tabs": "@vant/weapp/tabs/index",
-    "van-tab": "@vant/weapp/tab/index"
+    "van-tab": "@vant/weapp/tab/index",
+    "van-action-sheet": "@vant/weapp/action-sheet/index"
   },
   "navigationBarTitleText": "记账本"
 }
