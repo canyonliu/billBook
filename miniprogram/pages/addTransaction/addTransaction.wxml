@@ -27,44 +27,8 @@
       bind:change="onDescriptionChange"
     />
     <van-cell title="日期" is-link value="{{ formattedDate }}" bind:click="onDisplayDatePicker" />
-    <van-field
-      value="{{ tags }}"
-      label="标签"
-      placeholder="用逗号分隔, 如: 食物,交通"
-      bind:change="onTagsChange"
-      bind:blur="formatTags"
-    />
+    <van-cell title="标签" is-link value="{{ selectedTagNames }}" bind:click="onShowTagSelector" />
   </van-cell-group>
-
-  <view class="tags-display">
-    <van-tag 
-      wx:for="{{ tagList }}" 
-      wx:key="index" 
-      type="primary" 
-      size="large" 
-      custom-class="tag-item"
-    >
-      {{ item }}
-    </van-tag>
-  </view>
-
-  <view class="form-group preset-tags-group">
-    <view class="preset-tags-title">常用标签</view>
-    <view class="tags-display">
-      <van-tag 
-        wx:for="{{ defaultTags }}" 
-        wx:key="index" 
-        plain
-        type="{{ tagList.includes(item) ? 'primary' : 'default' }}"
-        size="large" 
-        custom-class="tag-item"
-        data-tag="{{ item }}"
-        bind:tap="onSelectTag"
-      >
-        {{ item }}
-      </van-tag>
-    </view>
-  </view>
 
   <view class="button-wrapper">
     <van-button type="primary" block round bind:click="onSave">保 存</van-button>
@@ -79,6 +43,18 @@
       max-date="{{ maxDate }}"
       bind:confirm="onConfirmDatePicker"
       bind:cancel="onCancelDatePicker"
+    />
+  </van-popup>
+
+  <!-- Tag Selector Popup -->
+  <van-popup show="{{ showTagSelector }}" position="bottom" bind:close="onCloseTagSelector" custom-style="height: 70%;">
+    <van-tree-select
+      items="{{ categorizedTags }}"
+      main-active-index="{{ mainActiveIndex }}"
+      active-id="{{ activeTagIds }}"
+      max="5"
+      bind:click-nav="onClickNav"
+      bind:click-item="onSelectTagItem"
     />
   </van-popup>
 </view>

@@ -1,8 +1,9 @@
 /* pages/addTransaction/addTransaction.wxss */
 .container {
-  padding: 30rpx 30rpx 180rpx; /* More space for button */
+  padding: 30rpx;
   background-color: #f7f8fa;
   min-height: 100vh;
+  padding-bottom: 160rpx; /* Space for button */
   box-sizing: border-box;
 }
 
@@ -41,30 +42,6 @@
 
 .van-radio--horizontal {
   margin-right: 40rpx;
-}
-
-.preset-tags-group {
-  background-color: transparent;
-  box-shadow: none;
-  padding: 20rpx 0 10rpx;
-}
-
-.preset-tags-title {
-  font-size: 28rpx;
-  color: #646566;
-  margin-bottom: 20rpx;
-  padding-left: 10rpx;
-}
-
-.tags-display {
-  padding: 0 10rpx;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.tag-item {
-  margin-right: 15rpx;
-  margin-bottom: 15rpx;
 }
 
 .button-wrapper {

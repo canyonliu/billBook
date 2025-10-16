@@ -1,9 +1,9 @@
 <!-- pages/transactionDetail/transactionDetail.wxml -->
 <view class="container">
-  <van-tabs active="{{ activeTab }}" bind:change="onTabChange" sticky tab-class="detail-tab" nav-class="fixed-width-nav">
+  <van-tabs active="{{ activeTab }}" bind:change="onTabChange" sticky tab-class="detail-tab" nav-class="fixed-width-nav" custom-class="full-width-tabs">
     <van-tab title="支出">
       <view class="list-container" wx:if="{{ expenseTransactions.length > 0 }}">
-        <view wx:for="{{ expenseTransactions }}" wx:key="id" class="transaction-card">
+        <view wx:for="{{ expenseTransactions }}" wx:key="id" class="transaction-card" bind:tap="onEditTransaction" data-id="{{item.id}}">
           <van-icon name="{{item.icon}}" size="24px" class="card-icon" />
           <view class="card-content">
             <text class="description">{{item.description || '无描述'}}</text>
@@ -19,7 +19,7 @@
     </van-tab>
     <van-tab title="收入">
       <view class="list-container" wx:if="{{ incomeTransactions.length > 0 }}">
-        <view wx:for="{{ incomeTransactions }}" wx:key="id" class="transaction-card">
+        <view wx:for="{{ incomeTransactions }}" wx:key="id" class="transaction-card" bind:tap="onEditTransaction" data-id="{{item.id}}">
           <van-icon name="{{item.icon}}" size="24px" class="card-icon" />
           <view class="card-content">
             <text class="description">{{item.description || '无描述'}}</text>

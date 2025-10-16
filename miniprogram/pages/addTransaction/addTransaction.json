@@ -8,7 +8,8 @@
     "van-datetime-picker": "@vant/weapp/datetime-picker/index",
     "van-cell": "@vant/weapp/cell/index",
     "van-icon": "@vant/weapp/icon/index",
-    "van-tag": "@vant/weapp/tag/index"
+    "van-tag": "@vant/weapp/tag/index",
+    "van-tree-select": "@vant/weapp/tree-select/index"
   },
   "navigationBarTitleText": "新增记账"
 }

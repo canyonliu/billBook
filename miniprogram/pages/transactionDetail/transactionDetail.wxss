@@ -4,8 +4,15 @@
   background-color: #f7f8fa;
 }
 
-.van-tab {
-  width: 50% !important;
+.full-width-tabs {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.fixed-width-nav .van-tab {
+  flex: 1 !important;
+  text-align: center;
 }
 
 .list-container {
@@ -40,9 +47,10 @@
 .description {
   font-size: 30rpx;
   color: #323233;
-  margin-bottom: 10rpx;
+  margin-bottom: 15rpx; /* Increased margin for separation */
   white-space: normal; /* Allow wrapping */
   word-break: break-all;
+  display: block; /* Ensure it takes its own line */
 }
 
 .tags-and-time {

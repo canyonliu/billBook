@@ -6,13 +6,37 @@ Page({
     type: 'expense', // 'income' or 'expense'
     amount: '',
     description: '',
-    tags: '', // Comma-separated string
-    tagList: [], // Array of tags
     transactionDate: new Date().getTime(),
     formattedDate: '',
+    transactionId: null, // To store the ID of the transaction being edited
+    isEditMode: false, // Flag to indicate if in edit mode
 
-    // Default tags
-    defaultTags: ['餐饮', '交通', '购物', '娱乐', '住房', '学习', '工资', '理财'],
+    // Categorized tags for van-tree-select
+    categorizedTags: [
+      {
+        text: '生活',
+        children: [
+          { id: '餐饮', text: '餐饮', icon: 'food-o' },
+          { id: '购物', text: '购物', icon: 'shopping-cart-o' },
+          { id: '交通', text: '交通', icon: 'logistics' },
+          { id: '娱乐', text: '娱乐', icon: 'smile-o' },
+          { id: '住房', text: '住房', icon: 'wap-home-o' },
+          { id: '学习', text: '学习', icon: 'notes-o' },
+        ],
+      },
+      {
+        text: '理财',
+        children: [
+          { id: '工资', text: '工资', icon: 'gold-coin-o' },
+          { id: '理财', text: '理财', icon: 'balance-o' },
+        ],
+      },
+      // Add more categories and tags as needed
+    ],
+    mainActiveIndex: 0, // Current active category index for van-tree-select
+    activeTagIds: [], // Array of selected tag IDs
+    selectedTagNames: '', // Display string for selected tags
+    showTagSelector: false, // Control visibility of tag selection popup
 
     // Date picker
     showDatePicker: false,
@@ -21,7 +45,30 @@ Page({
   },
 
   onLoad(options) {
-    this.formatDisplayDate(this.data.transactionDate);
+    if (options.id) {
+      const allData = util.loadData();
+      const transaction = allData.transactions.find(t => t.id === options.id);
+      if (transaction) {
+        this.setData({
+          transactionId: transaction.id,
+          isEditMode: true,
+          type: transaction.type,
+          amount: transaction.amount.toString(),
+          description: transaction.description,
+          activeTagIds: transaction.tags, // Populate activeTagIds
+          transactionDate: transaction.date,
+        });
+        this.formatDisplayDate(transaction.date);
+        this.updateSelectedTagNames(); // Update display for selected tags
+        wx.setNavigationBarTitle({ title: '编辑记账' });
+      } else {
+        wx.showToast({ title: '交易不存在', icon: 'none' });
+        setTimeout(() => wx.navigateBack(), 1500);
+      }
+    } else {
+      this.formatDisplayDate(this.data.transactionDate);
+      wx.setNavigationBarTitle({ title: '新增记账' });
+    }
   },
 
   formatDisplayDate(date) {
@@ -34,6 +81,20 @@ Page({
     this.setData({
       formattedDate: `${year}-${month}-${day} ${hours}:${minutes}`
     });
+  },
+
+  // Update selected tag names for display
+  updateSelectedTagNames() {
+    const { categorizedTags, activeTagIds } = this.data;
+    const selectedNames = [];
+    categorizedTags.forEach(category => {
+      category.children.forEach(tag => {
+        if (activeTagIds.includes(tag.id)) {
+          selectedNames.push(tag.text);
+        }
+      });
+    });
+    this.setData({ selectedTagNames: selectedNames.join(', ') });
   },
 
   // Form handlers
@@ -49,34 +110,32 @@ Page({
     this.setData({ description: event.detail });
   },
 
-  onTagsChange(event) {
-    this.setData({ tags: event.detail });
+  // Tag selection handlers
+  onShowTagSelector() {
+    this.setData({ showTagSelector: true });
   },
 
-  formatTags() {
-    const { tags } = this.data;
-    const tagList = tags
-      .split(/[,，\s]+/)
-      .filter(tag => tag.trim() !== '');
-    this.setData({ tagList });
+  onCloseTagSelector() {
+    this.setData({ showTagSelector: false });
   },
 
-  onSelectTag(event) {
-    const selectedTag = event.currentTarget.dataset.tag;
-    let { tagList } = this.data;
+  onClickNav(event) {
+    this.setData({ mainActiveIndex: event.detail.index || 0 });
+  },
 
-    if (tagList.includes(selectedTag)) {
-      // Remove tag if it's already selected
-      tagList = tagList.filter(t => t !== selectedTag);
+  onSelectTagItem(event) {
+    const { id } = event.detail;
+    let { activeTagIds } = this.data;
+
+    const index = activeTagIds.indexOf(id);
+    if (index > -1) {
+      activeTagIds.splice(index, 1); // Remove tag
     } else {
-      // Add tag
-      tagList.push(selectedTag);
+      activeTagIds.push(id); // Add tag
     }
 
-    this.setData({
-      tagList,
-      tags: tagList.join(', ')
-    });
+    this.setData({ activeTagIds });
+    this.updateSelectedTagNames();
   },
 
   // Date Picker handlers
@@ -103,7 +162,7 @@ Page({
 
   // Save logic
   onSave() {
-    const { type, amount, description, transactionDate, tagList } = this.data;
+    const { type, amount, description, transactionDate, activeTagIds, transactionId, isEditMode } = this.data;
 
     if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
       wx.showToast({ title: '请输入有效的金额', icon: 'none' });
@@ -116,15 +175,23 @@ Page({
     }
 
     const newTransaction = {
-      id: util.generateId(),
+      id: isEditMode ? transactionId : util.generateId(),
       type,
       amount: parseFloat(amount),
       description,
-      tags: tagList,
+      tags: activeTagIds, // Save activeTagIds as tags
       date: transactionDate,
     };
 
-    allData.transactions.unshift(newTransaction); // Add to the beginning
+    if (isEditMode) {
+      const index = allData.transactions.findIndex(t => t.id === transactionId);
+      if (index !== -1) {
+        allData.transactions[index] = newTransaction;
+      }
+    } else {
+      allData.transactions.unshift(newTransaction); // Add to the beginning
+    }
+    
     util.saveData(allData);
 
     wx.showToast({ title: '保存成功', icon: 'success' });

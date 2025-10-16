@@ -36,11 +36,22 @@ const groupAndProcessTransactions = (transactions, filterType) => {
     return foundTag ? iconMap[foundTag] : iconMap.default;
   };
 
-  const processed = transactions.map(t => ({
-    ...t,
-    displayText: formatDateTimeForList(t.date, filterType),
-    icon: getIcon(t.tags),
-  }));
+  const processed = transactions.map(t => {
+    const tagObjects = (t.tags || []).map(tag => {
+      const tagName = (typeof tag === 'object' && tag !== null) ? tag.text || tag.id : tag;
+      return {
+        name: tagName,
+        icon: iconMap[tagName] || iconMap.default
+      };
+    });
+
+    return {
+      ...t,
+      displayText: formatDateTimeForList(t.date, filterType),
+      icon: getIcon(t.tags),
+      tagObjects: tagObjects
+    };
+  });
 
   const groups = processed.reduce((acc, t) => {
     const dateKey = formatDate(t.date);
@@ -195,6 +206,11 @@ Page({
 
   navigateToAddTransaction() {
     wx.navigateTo({ url: '../addTransaction/addTransaction' });
+  },
+
+  onEditTransaction(event) {
+    const { id } = event.currentTarget.dataset;
+    wx.navigateTo({ url: `../addTransaction/addTransaction?id=${id}` });
   },
 
   navigateToDetails() {

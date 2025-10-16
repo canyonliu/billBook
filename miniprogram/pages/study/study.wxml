@@ -22,15 +22,15 @@
 
       <!-- Action Buttons -->
       <view class="actions">
-        <button class="action-btn prev-btn" bind:tap="prevCard" disabled="{{currentIndex === 0}}">
+        <view class="action-btn prev-btn {{currentIndex === 0 ? 'disabled' : ''}}" bind:tap="prevCard" hover-class="none">
           <van-icon name="arrow-left" custom-class="nav-icon" />
-        </button>
-        <button class="action-btn flip-btn" bind:tap="flipCard">
+        </view>
+        <view class="action-btn flip-btn" bind:tap="flipCard" hover-class="none">
           <van-icon name="replay" custom-class="flip-icon" />
-        </button>
-        <button class="action-btn next-btn" bind:tap="nextCard" disabled="{{currentIndex === deck.cards.length - 1}}">
+        </view>
+        <view class="action-btn next-btn {{currentIndex === deck.cards.length - 1 ? 'disabled' : ''}}" bind:tap="nextCard" hover-class="none">
           <van-icon name="arrow" custom-class="nav-icon" />
-        </button>
+        </view>
       </view>
     </view>
 

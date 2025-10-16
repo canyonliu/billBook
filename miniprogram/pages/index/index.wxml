@@ -14,7 +14,6 @@
         </view>
         <view class="deck-actions">
           <van-icon name="edit" custom-class="action-icon" data-id="{{item.id}}" catch:tap="navigateToEdit" />
-          <van-icon name="arrow" custom-class="action-icon" />
         </view>
       </view>
       <view slot="right">

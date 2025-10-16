@@ -74,4 +74,9 @@ Page({
   onTabChange(event) {
     this.setData({ activeTab: event.detail.name });
   },
+
+  onEditTransaction(event) {
+    const { id } = event.currentTarget.dataset;
+    wx.navigateTo({ url: `../addTransaction/addTransaction?id=${id}` });
+  },
 });

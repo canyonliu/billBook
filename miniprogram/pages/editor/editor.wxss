@@ -28,6 +28,7 @@ input {
   width: 100%;
   box-sizing: border-box;
   transition: border-color 0.3s;
+  height: 80rpx; /* Explicitly set height */
 }
 
 input:focus {
