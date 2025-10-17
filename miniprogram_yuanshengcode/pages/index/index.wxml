@@ -1,0 +1,56 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- Menu Button -->
+  <view wx:if="{{ !showSidebar }}" class="menu-button" bind:tap="onOpenSidebar">
+    <van-icon name="wap-nav" size="24px" color="#6B59CC" />
+  </view>
+
+  <view class="deck-list" wx:if="{{decks.length > 0}}">
+    <van-swipe-cell right-width="{{ 100 }}" wx:for="{{decks}}" wx:key="id" data-id="{{item.id}}" bind:close="onSwipeCellClose" custom-class="swipe-cell-wrapper">
+      <view class="deck-item" bind:tap="navigateToStudy" data-id="{{item.id}}">
+        <view class="deck-content">
+          <view class="deck-name">{{item.name}}</view>
+          <view class="deck-info">{{item.cards.length}} 张卡片</view>
+        </view>
+        <view class="deck-actions">
+          <van-icon name="edit" custom-class="action-icon" data-id="{{item.id}}" catch:tap="navigateToEdit" />
+        </view>
+      </view>
+      <view slot="right">
+        <van-button type="danger" custom-class="delete-button" data-id="{{item.id}}" catch:tap="showDeleteModal">
+          <van-icon name="delete-o" color="#fff" size="20px" />
+          <text>删除</text>
+        </van-button>
+      </view>
+    </van-swipe-cell>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <van-icon name="inbox-o" size="50px" color="#bdc3c7" />
+    <text class="empty-text">还没有卡片集</text>
+    <text class="empty-tip">点击下方按钮创建一个吧！</text>
+  </view>
+
+  <button class="add-btn" bind:tap="navigateToAdd">
+    <van-icon name="plus" color="#fff" custom-class="add-btn-icon"/>
+    <text>创建新卡片集</text>
+  </button>
+
+  <!-- Sidebar Popup -->
+  <van-popup show="{{ showSidebar }}" position="left" custom-style="height: 100%; width: 70%;" bind:close="onCloseSidebar">
+    <view class="sidebar-header">
+      <text>导航</text>
+    </view>
+    <view class="sidebar-menu">
+      <view class="menu-item" bind:tap="navigateToRecycleBinFromSidebar">
+        <van-icon name="delete" size="20px" />
+        <text>回收站</text>
+      </view>
+      <view class="menu-item" bind:tap="navigateToAccountingFromSidebar">
+        <van-icon name="balance-o" size="20px" />
+        <text>记账本</text>
+      </view>
+      <!-- Future menu items can be added here -->
+    </view>
+  </van-popup>
+</view>

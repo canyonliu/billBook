@@ -1,0 +1,87 @@
+@import '../style/var.less';
+@import '../style/hairline.less';
+@import './share-sheet-options.less';
+
+.van-share-sheet {
+  &__header {
+    .theme(padding, '@share-sheet-header-padding');
+
+    text-align: center;
+  }
+
+  &__title {
+    .theme(margin-top, '@padding-xs');
+
+    .theme(color, '@share-sheet-title-color');
+
+    font-weight: normal;
+
+    .theme(font-size, '@share-sheet-title-font-size');
+
+    .theme(line-height, '@share-sheet-title-line-height');
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__title:not(:empty) + &__title {
+    display: none;
+  }
+
+  &__description {
+    display: block;
+
+    .theme(margin-top, '@padding-xs');
+
+    .theme(color, '@share-sheet-description-color');
+
+    .theme(font-size, '@share-sheet-description-font-size');
+
+    .theme(line-height, '@share-sheet-description-line-height');
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__description:not(:empty) + &__description {
+    display: none;
+  }
+
+  &__cancel {
+    display: block;
+    box-sizing: content-box;
+    width: 100%;
+    height: auto;
+    padding: 0;
+
+    .theme(font-size, '@share-sheet-cancel-button-font-size');
+
+    .theme(line-height, '@share-sheet-cancel-button-height');
+
+    text-align: center;
+
+    .theme(background, '@share-sheet-cancel-button-background');
+
+    border: none;
+
+    &::before {
+      display: block;
+
+      .theme(height, '@padding-xs');
+
+      .theme(background-color, '@background-color');
+
+      content: ' ';
+    }
+
+    &::after {
+      display: none;
+    }
+
+    &:active {
+      .theme(background-color, '@active-color');
+    }
+  }
+}

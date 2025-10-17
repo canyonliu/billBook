@@ -1,0 +1,54 @@
+/* pages/addTransaction/addTransaction.wxss */
+.container {
+  padding: 30rpx;
+  background-color: #f7f8fa;
+  min-height: 100vh;
+  padding-bottom: 160rpx; /* Space for button */
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: 30rpx;
+  background-color: #fff;
+  padding: 30rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 16rpx rgba(0,0,0,0.04);
+}
+
+.amount-group {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+}
+
+.currency-symbol {
+  font-size: 50rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+  color: #333;
+}
+
+.amount-input {
+  font-size: 72rpx !important;
+  font-weight: bold !important;
+  height: 100rpx !important;
+  flex-grow: 1;
+  color: #333;
+}
+
+.van-cell-group--inset {
+  margin: 0 !important;
+}
+
+.van-radio--horizontal {
+  margin-right: 40rpx;
+}
+
+.button-wrapper {
+  position: fixed;
+  bottom: 50rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  z-index: 100;
+}

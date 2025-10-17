@@ -1,0 +1,54 @@
+<!--pages/study/study.wxml-->
+<view class="container">
+  <block wx:if="{{deck}}">
+    <!-- Main Study Area -->
+    <view class="study-area" wx:if="{{deck.cards.length > 0}}">
+      <!-- Progress Indicator -->
+      <view class="progress">{{currentIndex + 1}} / {{deck.cards.length}}</view>
+
+      <!-- Card Container -->
+      <view class="card-container" bind:tap="flipCard">
+        <view class="card-content {{isFlipped ? 'is-flipped' : ''}}">
+          <!-- Front Face -->
+          <view class="card-face card-front">
+            <text>{{deck.cards[currentIndex].front}}</text>
+          </view>
+          <!-- Back Face -->
+          <view class="card-face card-back">
+            <text>{{deck.cards[currentIndex].back}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Action Buttons -->
+      <view class="actions">
+        <view class="action-btn prev-btn {{currentIndex === 0 ? 'disabled' : ''}}" bind:tap="prevCard" hover-class="none">
+          <van-icon name="arrow-left" custom-class="nav-icon" />
+        </view>
+        <view class="action-btn flip-btn" bind:tap="flipCard" hover-class="none">
+          <van-icon name="replay" custom-class="flip-icon" />
+        </view>
+        <view class="action-btn next-btn {{currentIndex === deck.cards.length - 1 ? 'disabled' : ''}}" bind:tap="nextCard" hover-class="none">
+          <van-icon name="arrow" custom-class="nav-icon" />
+        </view>
+      </view>
+    </view>
+
+    <!-- Empty State for Deck -->
+    <view class="empty-state" wx:else>
+      <van-icon name="add-o" size="40px" color="#bdc3c7" />
+      <text class="empty-text">这个卡片集是空的</text>
+      <text class="empty-tip">快去添加一些卡片吧！</text>
+      <button class="add-card-btn" bind:tap="navigateToAddCard">
+        <van-icon name="plus" color="#fff" custom-class="add-card-btn-icon" />
+        <text>添加第一张卡片</text>
+      </button>
+    </view>
+
+  </block>
+
+  <!-- Loading State -->
+  <view wx:else>
+    <text>加载中...</text>
+  </view>
+</view>

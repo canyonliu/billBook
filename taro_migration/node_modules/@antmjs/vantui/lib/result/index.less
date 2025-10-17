@@ -1,0 +1,54 @@
+@import '../style/var.less';
+@import './iconfont/iconfont.less';
+
+.van-result {
+  position: relative;
+  text-align: center;
+  line-height: normal;
+  box-sizing: border-box;
+
+  &-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .theme(padding, '@result-padding');
+
+    margin-bottom: 40px;
+    background-color: #ffffff;
+  }
+
+  &-title {
+    padding-top: 40px;
+    font-size: 36px;
+    color: #333333;
+  }
+
+  &-message {
+    padding-top: 16px;
+    font-size: 26px;
+    color: #999999;
+    text-align: center;
+  }
+
+  .van-icon-result-success {
+    .theme(color, '@result-success-color');
+  }
+
+  .van-icon-result-wait {
+    .theme(color, '@result-wait-color');
+  }
+
+  .van-icon-result-info {
+    .theme(color, '@result-info-color');
+  }
+
+  .van-icon-result-warning {
+    .theme(color, '@result-warning-color');
+  }
+
+  .van-icon-result-error {
+    .theme(color, '@result-error-color');
+  }
+}

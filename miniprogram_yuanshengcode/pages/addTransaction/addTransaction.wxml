@@ -1,0 +1,60 @@
+<!-- pages/addTransaction/addTransaction.wxml -->
+<view class="container">
+  <view class="form-group">
+    <van-radio-group value="{{ type }}" bind:change="onTypeChange" direction="horizontal">
+      <van-radio name="expense">支出</van-radio>
+      <van-radio name="income">收入</van-radio>
+    </van-radio-group>
+  </view>
+
+  <view class="form-group amount-group">
+    <text class="currency-symbol">¥</text>
+    <van-field
+      value="{{ amount }}"
+      type="digit"
+      placeholder="0.00"
+      bind:change="onAmountChange"
+      input-class="amount-input"
+      border="{{ false }}"
+    />
+  </view>
+
+  <van-cell-group inset>
+    <van-field
+      value="{{ description }}"
+      label="描述"
+      placeholder="点击输入描述 (可选)"
+      bind:change="onDescriptionChange"
+    />
+    <van-cell title="日期" is-link value="{{ formattedDate }}" bind:click="onDisplayDatePicker" />
+    <van-cell title="标签" is-link value="{{ selectedTagNames }}" bind:click="onShowTagSelector" />
+  </van-cell-group>
+
+  <view class="button-wrapper">
+    <van-button type="primary" block round bind:click="onSave">保 存</van-button>
+  </view>
+
+  <!-- Date Picker Popup -->
+  <van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+    <van-datetime-picker
+      type="datetime"
+      value="{{ transactionDate }}"
+      min-date="{{ minDate }}"
+      max-date="{{ maxDate }}"
+      bind:confirm="onConfirmDatePicker"
+      bind:cancel="onCancelDatePicker"
+    />
+  </van-popup>
+
+  <!-- Tag Selector Popup -->
+  <van-popup show="{{ showTagSelector }}" position="bottom" bind:close="onCloseTagSelector" custom-style="height: 70%;">
+    <van-tree-select
+      items="{{ categorizedTags }}"
+      main-active-index="{{ mainActiveIndex }}"
+      active-id="{{ activeTagIds }}"
+      max="5"
+      bind:click-nav="onClickNav"
+      bind:click-item="onSelectTagItem"
+    />
+  </van-popup>
+</view>
