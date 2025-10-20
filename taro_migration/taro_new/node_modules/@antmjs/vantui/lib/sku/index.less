@@ -1,0 +1,46 @@
+@import '../style/var.less';
+
+.van-sku {
+  width: auto;
+
+  &-name {
+    height: 26px;
+    font-weight: bold;
+    font-size: 26px;
+    color: #000000;
+    margin-bottom: 36px;
+  }
+
+  &-attrs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &-attr {
+    margin-right: 24px;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 36px;
+    font-size: 22px;
+    border-radius: 8px;
+    color: #000000;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    margin-bottom: 24px;
+    background: rgb(242, 242, 242);
+    border: 2px solid rgb(242, 242, 242);
+
+    &-active {
+      background: fade(@primary-color, 10%);
+      border: 2px solid @primary-color;
+
+      .theme(color, '@primary-color');
+    }
+
+    &-disable {
+      color: rgb(126, 125, 125);
+      text-decoration: line-through;
+    }
+  }
+}

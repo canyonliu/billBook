@@ -1,0 +1,70 @@
+@import '../style/var.less';
+
+.van-pagination {
+  display: flex;
+
+  .theme(font-size, '@pagination-font-size');
+
+  .theme(color, '@pagination-color');
+
+  &-contain {
+    display: flex;
+  }
+
+  &-simple {
+    height: 78px;
+    width: 248px;
+    line-height: 78px;
+    text-align: center;
+  }
+
+  &-prev,
+  &-item,
+  &-next {
+    height: 78px;
+    min-width: 78px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .theme(background, '@white');
+
+    .theme(border-radius, '@pagination-item-border-radius');
+
+    border: @pagination-item-border-width solid @pagination-item-border-color;
+    cursor: pointer;
+  }
+
+  &-prev,
+  &-item {
+    border-right: none;
+  }
+
+  &-prev,
+  &-next {
+    .theme(padding, '@pagination-prev-next-padding');
+  }
+
+  .simple-border {
+    border-right: @pagination-item-border-width solid
+      @pagination-item-border-color;
+  }
+
+  .active {
+    .theme(color, '@white');
+
+    border: none;
+
+    .theme(background, '@pagination-active-background-color');
+  }
+
+  .disabled {
+    .theme(color, '@pagination-disable-color');
+
+    .theme(background-color, '@pagination-disable-background-color');
+
+    cursor: not-allowed;
+  }
+}

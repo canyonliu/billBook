@@ -1,0 +1,51 @@
+@import '../style/var.less';
+
+.van-goods-action-button {
+  border-radius: 0;
+  .theme(height, '@goods-action-button-height');
+  .theme(line-height, '@goods-action-button-line-height');
+
+  border-width: 0;
+
+  &--warning {
+    .theme(background,'@goods-action-button-warning-color');
+  }
+
+  &--danger {
+    .theme(background, '@goods-action-button-danger-color');
+  }
+
+  &--first {
+    margin-left: 10px;
+
+    .theme(
+      border-radius,
+      '@goods-action-button-border-radius 0 0 @goods-action-button-border-radius'
+    );
+  }
+
+  &--last {
+    margin-right: 10px;
+    .theme(
+      border-radius,
+      '0 @goods-action-button-border-radius @goods-action-button-border-radius 0'
+    );
+  }
+
+  &--first&--last {
+    .theme(border-radius, '@goods-action-button-border-radius');
+  }
+
+  &--plain {
+    .theme(background, '@goods-action-button-plain-color');
+  }
+
+  &--plain + &--plain {
+    border-left-width: 0 !important;
+  }
+
+  &__inner {
+    width: 100%;
+    .theme(font-weight, '@font-weight-bold') !important;
+  }
+}

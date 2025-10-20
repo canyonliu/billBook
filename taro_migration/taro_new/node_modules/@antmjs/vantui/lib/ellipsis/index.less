@@ -1,0 +1,30 @@
+@import '../style/var.less';
+
+.van-ellipsis-wrapper {
+  position: relative;
+
+  .van-ellipsis {
+    width: 100%;
+    overflow: auto;
+    white-space: unset;
+    text-overflow: unset;
+
+    .theme(font-size, '@ellipsis-font-size');
+
+    .theme(line-height, '@ellipsis-line-height');
+  }
+
+  .van-ellipsis-hidden {
+    width: 100%;
+    position: absolute;
+    left: -1000px;
+  }
+
+  .van-ellipsis-action {
+    padding-left: 10px;
+
+    .theme(color, '@ellipsis-primary-color');
+
+    .theme(font-size, '@ellipsis-action-font-size');
+  }
+}

@@ -1,0 +1,26 @@
+@import '../style/var.less';
+
+.van-infinite-scroll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-loading,
+  &-complete,
+  &-error {
+    .theme(color, '@infinite-scroll-color');
+
+    .theme(font-size, '@infinite-scroll-font-size');
+
+    line-height: 40px;
+    padding: 24px 0;
+  }
+
+  &-error {
+    .reload-btn {
+      padding-left: 8px;
+
+      .theme(color, '@infinite-scroll-primary-color');
+    }
+  }
+}

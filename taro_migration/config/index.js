@@ -1,3 +1,5 @@
+const path = require('path');
+
 const config = {
   projectName: 'taro_flashcard_memo',
   date: '2025-10-16',
@@ -9,7 +11,7 @@ const config = {
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
-  plugins: ['@antmjs/vantui/build/plugin'],
+  plugins: [],
   defineConstants: {},
   copy: {
     patterns: [],
@@ -19,6 +21,9 @@ const config = {
   compiler: 'webpack5',
   cache: {
     enable: false
+  },
+  alias: {
+    '@': path.resolve(__dirname, '..', 'src')
   },
   mini: {
     postcss: {
