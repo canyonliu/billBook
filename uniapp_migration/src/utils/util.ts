@@ -10,25 +10,21 @@ export const loadData = () => {
       if (!data.deletedDecks) {
         data.deletedDecks = [];
       }
-      // Ensure transactions exists
-      if (!data.transactions) {
-        data.transactions = [];
-      }
       console.log('util.loadData: Processed data', data);
       return data;
     }
-    // If no data, return initial structure
-    const initialData = { decks: [], deletedDecks: [], transactions: [] };
+    // If no data, return initial structure with both decks and deletedDecks
+    const initialData = { decks: [], deletedDecks: [] };
     console.log('util.loadData: Initial data (storage empty)', initialData);
     return initialData;
   } catch (e) {
     console.error('Failed to load data from storage', e);
-    return { decks: [], deletedDecks: [], transactions: [] };
+    return { decks: [], deletedDecks: [] };
   }
 };
 
 // 保存所有数据
-export const saveData = (data) => {
+export const saveData = (data: any) => {
   try {
     console.log('util.saveData: Data to be saved', data);
     uni.setStorageSync(STORAGE_KEY, data);
