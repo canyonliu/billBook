@@ -1,62 +1,46 @@
 <template>
   <view class="container">
     <view class="form-group">
-      <van-radio-group :value="type" @change="onTypeChange" direction="horizontal">
-        <van-radio name="expense">支出</van-radio>
-        <van-radio name="income">收入</van-radio>
-      </van-radio-group>
+      <uni-data-checkbox v-model="type" :localdata="typeOptions" />
     </view>
 
     <view class="form-group amount-group">
       <text class="currency-symbol">¥</text>
-      <van-field
-        :value="amount"
+      <uni-easyinput
+        v-model="amount"
         type="digit"
         placeholder="0.00"
-        @input="onAmountChange"
-        input-class="amount-input"
-        :border="false"
+        :inputBorder="false"
+        primaryColor="#6B59CC"
+        :styles="{ color: '#333', fontSize: '36px', fontWeight: 'bold' }"
       />
     </view>
 
-    <van-cell-group inset>
-      <van-field
-        :value="description"
-        label="描述"
-        placeholder="点击输入描述 (可选)"
-        @input="onDescriptionChange"
-      />
-      <van-cell title="日期" is-link :value="formattedDate" @click="onDisplayDatePicker" />
-      <van-cell title="标签" is-link :value="selectedTagNames" @click="onShowTagSelector" />
-    </van-cell-group>
+    <uni-list :border="false">
+      <uni-list-item :border="false">
+        <template v-slot:body>
+          <uni-easyinput
+            v-model="description"
+            type="textarea"
+            placeholder="点击输入描述 (可选)"
+            :inputBorder="false"
+          />
+        </template>
+      </uni-list-item>
+      <uni-list-item title="日期" showArrow :right-text="formattedDate" @click="openDatePicker" />
+      <uni-list-item title="标签" showArrow :right-text="selectedTagNames" @click="openTagPicker" />
+    </uni-list>
 
     <view class="button-wrapper">
-      <van-button type="primary" block round @click="onSave">保 存</van-button>
+      <button class="save-btn" @click="onSave">保 存</button>
     </view>
 
-    <!-- Date Picker Popup -->
-    <van-popup :show="showDatePicker" position="bottom" @close="onCloseDatePicker">
-      <van-datetime-picker
-        type="datetime"
-        :value="transactionDate"
-        :min-date="minDate"
-        :max-date="maxDate"
-        @confirm="onConfirmDatePicker"
-        @cancel="onCancelDatePicker"
-      />
-    </van-popup>
+    <!-- Date Picker -->
+    <uni-datetime-picker ref="datePicker" type="datetime" :value="transactionDate" @confirm="onConfirmDatePicker" />
 
-    <!-- Tag Selector Popup -->
-    <van-popup :show="showTagSelector" position="bottom" @close="onCloseTagSelector" custom-style="height: 70%;">
-      <van-tree-select
-        :items="categorizedTags"
-        :main-active-index="mainActiveIndex"
-        :active-id="activeTagIds"
-        max="5"
-        @click-nav="onClickNav"
-        @click-item="onSelectTagItem"
-      />
-    </van-popup>
+    <!-- Tag Picker -->
+    <uni-data-picker ref="tagPicker" :localdata="tagTree" popup-title="选择标签" v-model="activeTagIds" multiple :map="{text: 'text', value: 'value'}" @change="onTagChange" />
+
   </view>
 </template>
 
@@ -69,36 +53,40 @@ import * as util from '../../utils/util';
 const type = ref('expense');
 const amount = ref('');
 const description = ref('');
-const transactionDate = ref(new Date().getTime());
+const transactionDate = ref(Date.now());
 const transactionId = ref<string | null>(null);
 const isEditMode = ref(false);
 
-const categorizedTags = ref([
+const typeOptions = ref([{"value": "expense", "text": "支出"}, {"value": "income", "text": "收入"}]);
+
+// --- Picker Refs ---
+const datePicker = ref<any>(null);
+const tagPicker = ref<any>(null);
+
+// --- Tag Data ---
+const activeTagIds = ref<string[]>([]);
+const tagTree = ref([
   {
     text: '生活',
+    value: 'cat-1',
     children: [
-      { id: '餐饮', text: '餐饮', icon: 'food-o' },
-      { id: '购物', text: '购物', icon: 'shopping-cart-o' },
-      { id: '交通', text: '交通', icon: 'logistics' },
-      { id: '娱乐', text: '娱乐', icon: 'smile-o' },
-      { id: '住房', text: '住房', icon: 'wap-home-o' },
-      { id: '学习', text: '学习', icon: 'notes-o' },
+      { value: '餐饮', text: '餐饮' },
+      { value: '购物', text: '购物' },
+      { value: '交通', text: '交通' },
+      { value: '娱乐', text: '娱乐' },
+      { value: '住房', text: '住房' },
+      { value: '学习', text: '学习' },
     ],
   },
   {
     text: '理财',
+    value: 'cat-2',
     children: [
-      { id: '工资', text: '工资', icon: 'gold-coin-o' },
-      { id: '理财', text: '理财', icon: 'balance-o' },
+      { value: '工资', text: '工资' },
+      { value: '理财', text: '理财' },
     ],
   },
 ]);
-const mainActiveIndex = ref(0);
-const activeTagIds = ref<string[]>([]);
-const showTagSelector = ref(false);
-const showDatePicker = ref(false);
-const minDate = new Date(2000, 0, 1).getTime();
-const maxDate = new Date().getTime();
 
 // --- Computed Properties ---
 const formattedDate = computed(() => {
@@ -112,15 +100,7 @@ const formattedDate = computed(() => {
 });
 
 const selectedTagNames = computed(() => {
-  const selectedNames: string[] = [];
-  categorizedTags.value.forEach(category => {
-    category.children.forEach(tag => {
-      if (activeTagIds.value.includes(tag.id)) {
-        selectedNames.push(tag.text);
-      }
-    });
-  });
-  return selectedNames.join(', ');
+  return activeTagIds.value.join(', ');
 });
 
 // --- Lifecycle Hooks ---
@@ -147,55 +127,20 @@ onLoad((options: any) => {
 });
 
 // --- Methods ---
-const onTypeChange = (event: any) => {
-  type.value = event.detail;
+const openDatePicker = () => {
+  datePicker.value.open();
 };
 
-const onAmountChange = (event: any) => {
-  amount.value = event.detail;
+const openTagPicker = () => {
+  tagPicker.value.show();
 };
 
-const onDescriptionChange = (event: any) => {
-  description.value = event.detail;
+const onConfirmDatePicker = (e: any) => {
+  transactionDate.value = new Date(e).getTime();
 };
 
-const onShowTagSelector = () => {
-  showTagSelector.value = true;
-};
-
-const onCloseTagSelector = () => {
-  showTagSelector.value = false;
-};
-
-const onClickNav = (event: any) => {
-  mainActiveIndex.value = event.detail.index || 0;
-};
-
-const onSelectTagItem = (event: any) => {
-  const { id } = event.detail;
-  const index = activeTagIds.value.indexOf(id);
-  if (index > -1) {
-    activeTagIds.value.splice(index, 1);
-  } else {
-    activeTagIds.value.push(id);
-  }
-};
-
-const onDisplayDatePicker = () => {
-  showDatePicker.value = true;
-};
-
-const onCloseDatePicker = () => {
-  showDatePicker.value = false;
-};
-
-const onConfirmDatePicker = (event: any) => {
-  transactionDate.value = event.detail;
-  showDatePicker.value = false;
-};
-
-const onCancelDatePicker = () => {
-  showDatePicker.value = false;
+const onTagChange = (e: any) => {
+  activeTagIds.value = e.detail.value.map((item: any) => item.value);
 };
 
 const onSave = () => {
@@ -257,7 +202,7 @@ const onSave = () => {
 .amount-group {
   display: flex;
   align-items: center;
-  padding: 20rpx 30rpx;
+  padding: 10rpx 30rpx;
 }
 
 .currency-symbol {
@@ -267,22 +212,6 @@ const onSave = () => {
   color: #333;
 }
 
-.amount-input {
-  font-size: 72rpx !important;
-  font-weight: bold !important;
-  height: 100rpx !important;
-  flex-grow: 1;
-  color: #333;
-}
-
-.van-cell-group--inset {
-  margin: 0 !important;
-}
-
-.van-radio--horizontal {
-  margin-right: 40rpx;
-}
-
 .button-wrapper {
   position: fixed;
   bottom: 50rpx;
@@ -290,5 +219,18 @@ const onSave = () => {
   transform: translateX(-50%);
   width: 90%;
   z-index: 100;
+}
+
+.save-btn {
+  width: 100%;
+  height: 96rpx;
+  background-color: #6B59CC;
+  color: white;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  box-shadow: 0 8rpx 25rpx rgba(107, 89, 204, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

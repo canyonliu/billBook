@@ -1,27 +1,23 @@
 <template>
   <view class="container">
     <view class="item-list" v-if="deletedDecks.length > 0">
-      <van-swipe-cell 
-        :right-width="65" 
-        :left-width="65" 
-        v-for="item in deletedDecks" 
-        :key="item.id" 
-        custom-class="swipe-cell-wrapper"
-      >
-        <view class="list-item-content">
-          <text>{{ item.name }}</text>
-          <text class="deleted-info">已删除 {{ item.deletedAtText }}</text>
-        </view>
-        <template #left>
-          <van-button type="primary" custom-class="restore-button" @click="handleRestore(item.id)">恢复</van-button>
-        </template>
-        <template #right>
-          <van-button type="danger" custom-class="delete-button" @click="handlePermanentDelete(item.id)">彻底删除</van-button>
-        </template>
-      </van-swipe-cell>
+      <uni-swipe-action>
+        <uni-swipe-action-item 
+          v-for="item in deletedDecks" 
+          :key="item.id" 
+          :left-options="swipeActionOptions.left" 
+          :right-options="swipeActionOptions.right" 
+          @click="onSwipeClick($event, item)"
+        >
+          <view class="list-item-content">
+            <text>{{ item.name }}</text>
+            <text class="deleted-info">已删除 {{ item.deletedAtText }}</text>
+          </view>
+        </uni-swipe-action-item>
+      </uni-swipe-action>
     </view>
     <view class="empty-state" v-else>
-      <van-icon name="success" size="50px" color="#bdc3c7" />
+      <uni-icons type="checkmark-filled" size="50" color="#bdc3c7" />
       <text class="empty-text">回收站是空的</text>
       <text class="empty-tip">没有可恢复的卡片集</text>
     </view>
@@ -36,6 +32,21 @@ import * as util from '../../utils/util';
 const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
 
 const deletedDecks = ref<any[]>([]);
+
+const swipeActionOptions = ref({
+  left: [
+    {
+      text: '恢复',
+      style: { backgroundColor: '#2ecc71' }
+    }
+  ],
+  right: [
+    {
+      text: '彻底删除',
+      style: { backgroundColor: '#e74c3c' }
+    }
+  ]
+});
 
 onShow(() => {
   loadDeletedDecks();
@@ -62,20 +73,15 @@ const loadDeletedDecks = () => {
   deletedDecks.value = formattedDecks;
 };
 
-const handleRestore = (deckId: string) => {
-  uni.showModal({
-    title: '确认恢复',
-    content: '您确定要恢复这个卡片集吗？',
-    confirmColor: '#1989fa',
-    success: (res) => {
-      if (res.confirm) {
-        restoreDeck(deckId);
-      }
-    }
-  });
+const onSwipeClick = (e: any, item: any) => {
+  if (e.content.text === '恢复') {
+    handleRestore(item.id);
+  } else if (e.content.text === '彻底删除') {
+    handlePermanentDelete(item.id);
+  }
 };
 
-const restoreDeck = (deckId: string) => {
+const handleRestore = (deckId: string) => {
   const allData = util.loadData();
   const deckToRestoreIndex = allData.deletedDecks.findIndex((d: any) => d.id === deckId);
 

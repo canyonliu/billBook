@@ -1,12 +1,14 @@
 <template>
   <view class="container">
-    <van-tabs :active="activeTab" @change="onTabChange" sticky>
-      <van-tab title="按日">
-        <van-sticky>
+    <uni-segmented-control :current="activeTab" :values="['按日', '按月', '按年']" @clickItem="onTabChange" style-type="button" active-color="#6B59CC" />
+
+    <view class="content-area">
+      <view v-show="activeTab === 0">
+        <view class="sticky-top">
           <view class="sticky-header-container">
             <view class="date-selector" @click="onDisplayDatePicker">
               <text>{{ currentYear }}年{{ currentMonth }}月{{ currentDay }}日</text>
-              <van-icon name="arrow-down" size="16px" color="#666" />
+              <uni-icons type="arrow-down" size="16" color="#666" />
             </view>
             <view class="totals-card" @click="navigateToDetails">
               <view class="total-item">
@@ -19,15 +21,16 @@
               </view>
             </view>
           </view>
-        </van-sticky>
+        </view>
         <TransactionList :groups="groupedTransactions" @edit="onEditTransaction" />
-      </van-tab>
-      <van-tab title="按月">
-        <van-sticky>
+      </view>
+
+      <view v-show="activeTab === 1">
+        <view class="sticky-top">
           <view class="sticky-header-container">
             <view class="date-selector" @click="onDisplayDatePicker">
               <text>{{ currentYear }}年{{ currentMonth }}月</text>
-              <van-icon name="arrow-down" size="16px" color="#666" />
+              <uni-icons type="arrow-down" size="16" color="#666" />
             </view>
             <view class="totals-card" @click="navigateToDetails">
               <view class="total-item">
@@ -40,15 +43,16 @@
               </view>
             </view>
           </view>
-        </van-sticky>
+        </view>
         <TransactionList :groups="groupedTransactions" @edit="onEditTransaction" />
-      </van-tab>
-      <van-tab title="按年">
-        <van-sticky>
+      </view>
+
+      <view v-show="activeTab === 2">
+        <view class="sticky-top">
           <view class="sticky-header-container">
             <view class="date-selector" @click="onDisplayDatePicker">
               <text>{{ currentYear }}年</text>
-              <van-icon name="arrow-down" size="16px" color="#666" />
+              <uni-icons type="arrow-down" size="16" color="#666" />
             </view>
             <view class="totals-card" @click="navigateToDetails">
               <view class="total-item">
@@ -61,39 +65,41 @@
               </view>
             </view>
           </view>
-        </van-sticky>
+        </view>
         <TransactionList :groups="groupedTransactions" @edit="onEditTransaction" />
-      </van-tab>
-    </van-tabs>
+      </view>
+    </view>
 
     <!-- Add Transaction Button -->
     <button class="add-transaction-btn" @click="navigateToAddTransaction">
-      <van-icon name="plus" color="#fff" size="20px" />
+      <uni-icons type="plus" color="#fff" size="20" />
       <text>新增记账</text>
     </button>
 
     <!-- Date Picker Popup -->
-    <van-popup :show="showDatePicker" position="bottom" @close="onCloseDatePicker">
-      <van-datetime-picker
+    <uni-popup ref="datePickerPopup" type="bottom">
+      <uni-datetime-picker
         :type="filterType === 'day' ? 'date' : 'year-month'"
         :value="currentDate"
-        :min-date="minDate"
-        :max-date="maxDate"
-        :formatter="formatter"
+        :start="minDate"
+        :end="maxDate"
         @confirm="onPickerConfirm"
         @cancel="onCancelDatePicker"
       />
-    </van-popup>
+    </uni-popup>
 
-    <!-- Year Picker Action Sheet -->
-    <van-action-sheet
-      :show="showYearActionSheet"
-      :actions="yearActions"
-      title="选择年份"
-      @close="onCloseYearActionSheet"
-      @select="onSelectYear"
-      @cancel="onCloseYearActionSheet"
-    />
+    <!-- Year Picker Popup -->
+    <uni-popup ref="yearPickerPopup" type="bottom">
+      <view class="year-picker-container">
+        <view class="year-picker-header">选择年份</view>
+        <scroll-view scroll-y class="year-list">
+          <view v-for="action in yearActions" :key="action.name" class="year-item" @click="onSelectYear(action)">
+            {{ action.name }}
+          </view>
+        </scroll-view>
+        <view class="year-picker-cancel" @click="onCloseYearActionSheet">取消</view>
+      </view>
+    </uni-popup>
   </view>
 </template>
 
@@ -119,18 +125,18 @@ const currentDay = ref(now.getDate());
 const currentDate = ref(now.getTime());
 
 // --- Picker Related Data ---
-const showDatePicker = ref(false);
+const datePickerPopup = ref<any>(null);
 const minDate = new Date(2000, 0, 1).getTime();
 const maxDate = now.getTime();
-const showYearActionSheet = ref(false);
+const yearPickerPopup = ref<any>(null);
 const yearActions = computed(() => Array.from({ length: 30 }, (_, i) => ({ name: String(new Date().getFullYear() - i) })));
 
-const formatter = (type: string, value: string) => {
-  if (type === 'year') return `${value}年`;
-  if (type === 'month') return `${value}月`;
-  if (type === 'day') return `${value}日`;
-  return value;
-};
+// const formatter = (type: string, value: string) => {
+//   if (type === 'year') return `${value}年`;
+//   if (type === 'month') return `${value}月`;
+//   if (type === 'day') return `${value}日`;
+//   return value;
+// };
 
 // --- Icon Mapping ---
 const iconMap: { [key: string]: string } = {
@@ -247,12 +253,13 @@ const calculateTotals = () => {
 };
 
 const onTabChange = (event: any) => {
+  const index = event.currentIndex;
   let fType = 'day';
-  if (event.detail.name === 1) fType = 'month';
-  else if (event.detail.name === 2) fType = 'year';
+  if (index === 1) fType = 'month';
+  else if (index === 2) fType = 'year';
   
   filterType.value = fType;
-  activeTab.value = event.detail.name;
+  activeTab.value = index;
   
   const newDate = new Date();
   currentDate.value = newDate.getTime();
@@ -265,31 +272,28 @@ const onTabChange = (event: any) => {
 
 const onDisplayDatePicker = () => {
   if (filterType.value === 'year') {
-    showYearActionSheet.value = true;
+    yearPickerPopup.value.open();
   } else {
-    showDatePicker.value = true;
+    datePickerPopup.value.open();
   }
 };
 
-const onCloseDatePicker = () => {
-  showDatePicker.value = false;
-};
-
 const onCloseYearActionSheet = () => {
-  showYearActionSheet.value = false;
+  yearPickerPopup.value.close();
 };
 
-const onSelectYear = (event: any) => {
-  const selectedYear = event.detail.name;
+const onSelectYear = (action: any) => {
+  const selectedYear = action.name;
   const selectedDate = new Date(selectedYear, 0, 1);
   currentDate.value = selectedDate.getTime();
   currentYear.value = selectedYear;
+  yearPickerPopup.value.close();
   calculateTotals();
 };
 
-const onPickerConfirm = (event: any) => {
-  const selectedDate = new Date(event.detail);
-  showDatePicker.value = false;
+const onPickerConfirm = (e: any) => {
+  const selectedDate = new Date(e);
+  datePickerPopup.value.close();
   currentDate.value = selectedDate.getTime();
   currentYear.value = selectedDate.getFullYear();
   currentMonth.value = selectedDate.getMonth() + 1;
@@ -298,7 +302,7 @@ const onPickerConfirm = (event: any) => {
 };
 
 const onCancelDatePicker = () => {
-  showDatePicker.value = false;
+  datePickerPopup.value.close();
 };
 
 const navigateToAddTransaction = () => {
@@ -322,6 +326,12 @@ const navigateToDetails = () => {
   padding: 0;
   background-color: #f7f8fa;
   min-height: 100vh;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .sticky-header-container {
@@ -380,6 +390,41 @@ const navigateToDetails = () => {
 
 .value.income {
   color: #a7e9af;
+}
+
+.year-picker-container {
+  background-color: #fff;
+  border-radius: 16rpx 16rpx 0 0;
+}
+
+.year-picker-header {
+  padding: 30rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.year-list {
+  height: 50vh;
+  max-height: 600rpx;
+}
+
+.year-item {
+  padding: 30rpx;
+  font-size: 32rpx;
+  text-align: center;
+}
+
+.year-item:active {
+  background-color: #f5f5f5;
+}
+
+.year-picker-cancel {
+  padding: 30rpx;
+  font-size: 32rpx;
+  text-align: center;
+  border-top: 10rpx solid #f7f8fa;
 }
 
 .add-transaction-btn {

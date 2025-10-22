@@ -23,24 +23,24 @@
         <!-- Action Buttons -->
         <view class="actions">
           <view class="action-btn prev-btn" :class="{ 'disabled': currentIndex === 0 }" @click.stop="prevCard">
-            <van-icon name="arrow-left" custom-class="nav-icon" />
+            <uni-icons type="left" class="nav-icon" />
           </view>
           <view class="action-btn flip-btn" @click.stop="flipCard">
-            <van-icon name="replay" custom-class="flip-icon" />
+            <uni-icons type="refreshempty" class="flip-icon" />
           </view>
           <view class="action-btn next-btn" :class="{ 'disabled': currentIndex === deck.cards.length - 1 }" @click.stop="nextCard">
-            <van-icon name="arrow" custom-class="nav-icon" />
+            <uni-icons type="right" class="nav-icon" />
           </view>
         </view>
       </view>
 
       <!-- Empty State for Deck -->
       <view class="empty-state" v-else>
-        <van-icon name="add-o" size="40px" color="#bdc3c7" />
+        <uni-icons type="folder-add" size="40" color="#bdc3c7" />
         <text class="empty-text">这个卡片集是空的</text>
         <text class="empty-tip">快去添加一些卡片吧！</text>
         <button class="add-card-btn" @click="navigateToAddCard">
-          <van-icon name="plus" color="#fff" custom-class="add-card-btn-icon" />
+          <uni-icons type="plus" color="#fff" class="add-card-btn-icon" />
           <text>添加第一张卡片</text>
         </button>
       </view>

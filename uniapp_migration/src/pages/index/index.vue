@@ -2,57 +2,55 @@
   <view class="container">
     <!-- Menu Button -->
     <view v-if="!showSidebar" class="menu-button" @click="onOpenSidebar">
-      <van-icon name="wap-nav" size="24px" color="#6B59CC" />
+      <uni-icons type="bars" size="24" color="#6B59CC" />
     </view>
 
     <view class="deck-list" v-if="decks.length > 0">
-      <van-swipe-cell :right-width="100" v-for="item in decks" :key="item.id" :data-id="item.id" @close="onSwipeCellClose" custom-class="swipe-cell-wrapper">
-        <view class="deck-item" @click="navigateToStudy" :data-id="item.id">
-          <view class="deck-content">
-            <view class="deck-name">{{ item.name }}</view>
-            <view class="deck-info">{{ item.cards.length }} 张卡片</view>
+      <uni-swipe-action>
+        <uni-swipe-action-item :right-options="swipeActionOptions" @click="onSwipeClick($event, item)" v-for="item in decks" :key="item.id">
+          <view class="deck-item" @click="navigateToStudy(item.id)">
+            <view class="deck-content">
+              <view class="deck-name">{{ item.name }}</view>
+              <view class="deck-info">{{ item.cards.length }} 张卡片</view>
+            </view>
+            <view class="deck-actions">
+              <uni-icons type="compose" class="action-icon" @click.stop="navigateToEdit(item.id)" />
+            </view>
           </view>
-          <view class="deck-actions">
-            <van-icon name="edit" custom-class="action-icon" :data-id="item.id" @click.stop="navigateToEdit" />
-          </view>
-        </view>
-        <template #right>
-          <van-button type="danger" custom-class="delete-button" :data-id="item.id" @click.stop="showDeleteModal">
-            <van-icon name="delete-o" color="#fff" size="20px" />
-            <text>删除</text>
-          </van-button>
-        </template>
-      </van-swipe-cell>
+        </uni-swipe-action-item>
+      </uni-swipe-action>
     </view>
 
     <view class="empty-state" v-else>
-      <van-icon name="inbox-o" size="50px" color="#bdc3c7" />
+      <uni-icons type="folder-add" size="50" color="#bdc3c7" />
       <text class="empty-text">还没有卡片集</text>
       <text class="empty-tip">点击下方按钮创建一个吧！</text>
     </view>
 
     <button class="add-btn" @click="navigateToAdd">
-      <van-icon name="plus" color="#fff" custom-class="add-btn-icon"/>
+      <uni-icons type="plus" color="#fff" class="add-btn-icon"/>
       <text>创建新卡片集</text>
     </button>
 
     <!-- Sidebar Popup -->
-    <van-popup :show="showSidebar" position="left" custom-style="height: 100%; width: 70%;" @close="onCloseSidebar">
-      <view class="sidebar-header">
-        <text>导航</text>
-      </view>
-      <view class="sidebar-menu">
-        <view class="menu-item" @click="navigateToRecycleBinFromSidebar">
-          <van-icon name="delete" size="20px" />
-          <text>回收站</text>
+    <uni-popup ref="sidebarPopup" type="left">
+      <view class="sidebar-container">
+        <view class="sidebar-header">
+          <text>导航</text>
         </view>
-        <view class="menu-item" @click="navigateToAccountingFromSidebar">
-          <van-icon name="balance-o" size="20px" />
-          <text>记账本</text>
+        <view class="sidebar-menu">
+          <view class="menu-item" @click="navigateToRecycleBinFromSidebar">
+            <uni-icons type="trash" size="20" />
+            <text>回收站</text>
+          </view>
+          <view class="menu-item" @click="navigateToAccountingFromSidebar">
+            <uni-icons type="wallet" size="20" />
+            <text>记账本</text>
+          </view>
+          <!-- Future menu items can be added here -->
         </view>
-        <!-- Future menu items can be added here -->
       </view>
-    </van-popup>
+    </uni-popup>
   </view>
 </template>
 
@@ -62,7 +60,16 @@ import { onShow } from '@dcloudio/uni-app';
 import * as util from '../../utils/util';
 
 const decks = ref<any[]>([]);
-const showSidebar = ref(false);
+const sidebarPopup = ref<any>(null);
+
+const swipeActionOptions = ref([
+  {
+    text: '删除',
+    style: {
+      backgroundColor: '#ee0a24'
+    }
+  }
+]);
 
 onShow(() => {
   console.log('index.vue: onShow triggered');
@@ -81,20 +88,23 @@ const navigateToAdd = () => {
   uni.navigateTo({ url: '../editor/editor' });
 };
 
-const navigateToStudy = (e: any) => {
-  const deckId = e.currentTarget.dataset.id;
+const onSwipeClick = (e: any, item: any) => {
+  if (e.content.text === '删除') {
+    showDeleteModal(item.id);
+  }
+};
+
+const navigateToStudy = (deckId: string) => {
   console.log('index.vue: navigateToStudy for deckId', deckId);
   uni.navigateTo({ url: `../study/study?id=${deckId}` });
 };
 
-const navigateToEdit = (e: any) => {
-  const deckId = e.currentTarget.dataset.id;
+const navigateToEdit = (deckId: string) => {
   console.log('index.vue: navigateToEdit for deckId', deckId);
   uni.navigateTo({ url: `../editor/editor?id=${deckId}` });
 };
 
-const showDeleteModal = (e: any) => {
-  const deckId = e.currentTarget.dataset.id;
+const showDeleteModal = (deckId: string) => {
   console.log('index.vue: showDeleteModal for deckId', deckId);
   uni.showModal({
     title: '确认删除',
@@ -136,13 +146,11 @@ const moveToRecycleBin = (deckId: string) => {
 
 // Sidebar related methods
 const onOpenSidebar = () => {
-  console.log('index.vue: onOpenSidebar triggered');
-  showSidebar.value = true;
+  sidebarPopup.value.open('left');
 };
 
 const onCloseSidebar = () => {
-  console.log('index.vue: onCloseSidebar triggered');
-  showSidebar.value = false;
+  sidebarPopup.value.close();
 };
 
 const navigateToRecycleBinFromSidebar = () => {
@@ -258,6 +266,10 @@ van-swipe-cell {
   font-size: 24rpx !important; /* Smaller font for text */
 }
 
+.delete-button.delete-button-danger {
+  background-color: #ee0a24 !important;
+}
+
 .delete-button .van-icon {
   margin-bottom: 5rpx; /* Space between icon and text */
   font-size: 28px !important; /* Adjust icon size */
@@ -310,6 +322,12 @@ van-swipe-cell {
 }
 
 /* Sidebar Styles */
+.sidebar-container {
+  width: 70vw; /* Use vw for viewport width */
+  height: 100vh;
+  background-color: #fff;
+}
+
 .sidebar-header {
   padding: 40rpx 30rpx;
   font-size: 36rpx;

@@ -15,7 +15,7 @@
         <view class="card-editor-item" v-for="(item, index) in cards" :key="item.id">
           <view class="card-header">
             <view class="card-title">卡片 {{ index + 1 }}</view>
-            <van-icon name="delete-o" custom-class="delete-card-icon" color="#e74c3c" @click="removeCard(item.id)" />
+            <uni-icons type="trash" class="delete-card-icon" color="#e74c3c" @click="removeCard(item.id)" />
           </view>
           <view class="card-body">
             <textarea class="card-input" placeholder="输入正面内容..." v-model="item.front"></textarea>
@@ -26,7 +26,7 @@
 
       <!-- Add Card Button -->
       <button class="add-card-btn-main" @click="addCard">
-        <van-icon name="plus" color="#6B59CC" custom-class="add-card-btn-icon" />
+        <uni-icons type="plus" color="#6B59CC" class="add-card-btn-icon" />
         <text>添加新卡片</text>
       </button>
     </view>
