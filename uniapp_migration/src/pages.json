@@ -1,9 +1,15 @@
 {
 	"pages": [
 		{
+			"path": "pages/accounting/accounting",
+			"style": {
+				"navigationBarTitleText": "记账本"
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationBarTitleText": "单词本"
 			}
 		},
 		{
@@ -14,9 +20,6 @@
 		},
 		{
 			"path": "pages/recycleBin/recycleBin"
-		},
-		{
-			"path": "pages/accounting/accounting"
 		},
 		{
 			"path": "pages/addTransaction/addTransaction"

@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <uni-segmented-control :current="activeTab" :values="['按日', '按月', '按年']" @clickItem="onTabChange" style-type="button" active-color="#6B59CC" />
+    <uni-segmented-control :current="activeTab" :values="['按日', '按月', '按年']" @clickItem="onTabChange" style-type="button" active-color="#6B59CC" class="segmented-control" />
 
     <view class="content-area">
       <view v-show="activeTab === 0">
@@ -328,6 +328,11 @@ const navigateToDetails = () => {
   min-height: 100vh;
 }
 
+.segmented-control {
+  width: 100%;
+  margin: 20rpx 0;
+}
+
 .sticky-top {
   position: sticky;
   top: 0;
@@ -335,7 +340,7 @@ const navigateToDetails = () => {
 }
 
 .sticky-header-container {
-  padding: 20rpx 20rpx 0 20rpx;
+  padding: 0 20rpx 0 20rpx;
   background-color: #f7f8fa;
 }
 

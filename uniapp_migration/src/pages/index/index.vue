@@ -1,5 +1,10 @@
 <template>
   <view class="container">
+    <!-- Banner -->
+    <view class="banner-container" v-if="tips">
+      <text class="banner-text">{{ tips }}</text>
+    </view>
+
     <!-- Menu Button -->
     <view v-if="!showSidebar" class="menu-button" @click="onOpenSidebar">
       <uni-icons type="bars" size="24" color="#6B59CC" />
@@ -39,13 +44,17 @@
           <text>导航</text>
         </view>
         <view class="sidebar-menu">
-          <view class="menu-item" @click="navigateToRecycleBinFromSidebar">
-            <uni-icons type="trash" size="20" />
-            <text>回收站</text>
-          </view>
           <view class="menu-item" @click="navigateToAccountingFromSidebar">
             <uni-icons type="wallet" size="20" />
             <text>记账本</text>
+          </view>
+          <view class="menu-item" @click="navigateToStudyFromSidebar">
+            <uni-icons type="book" size="20" />
+            <text>单词本</text>
+          </view>
+          <view class="menu-item" @click="navigateToRecycleBinFromSidebar">
+            <uni-icons type="trash" size="20" />
+            <text>回收站</text>
           </view>
           <!-- Future menu items can be added here -->
         </view>
@@ -61,6 +70,7 @@ import * as util from '../../utils/util';
 
 const decks = ref<any[]>([]);
 const sidebarPopup = ref<any>(null);
+const tips = ref<string>('');
 
 const swipeActionOptions = ref([
   {
@@ -74,6 +84,10 @@ const swipeActionOptions = ref([
 onShow(() => {
   console.log('index.vue: onShow triggered');
   loadDecks();
+  const storedTips = uni.getStorageSync('tipsData');
+  if (storedTips) {
+    tips.value = storedTips;
+  }
 });
 
 const loadDecks = () => {
@@ -161,6 +175,14 @@ const navigateToRecycleBinFromSidebar = () => {
   });
 };
 
+const navigateToStudyFromSidebar = () => {
+  console.log('index.vue: navigateToStudyFromSidebar triggered');
+  onCloseSidebar(); // Close sidebar first
+  uni.navigateTo({
+    url: '../study/study'
+  });
+};
+
 const navigateToAccountingFromSidebar = () => {
   console.log('index.vue: navigateToAccountingFromSidebar triggered');
   onCloseSidebar(); // Close sidebar first
@@ -178,6 +200,21 @@ const onSwipeCellClose = (e: any) => {
 /* pages/index/index.wxss */
 .container {
   padding: 0; /* Remove all padding from container */
+}
+
+/* Banner Styles */
+.banner-container {
+  background: linear-gradient(135deg, #6B59CC, #836FFF);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin: 20rpx;
+  box-shadow: 0 8rpx 25rpx rgba(107, 89, 204, 0.3);
+}
+
+.banner-text {
+  color: #fff;
+  font-size: 28rpx;
+  text-align: center;
 }
 
 /* Menu Button */
