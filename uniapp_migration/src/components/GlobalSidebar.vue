@@ -11,7 +11,7 @@
           <text>记账本</text>
         </view>
         <view class="menu-item" @click="navigateTo('/pages/wordbook/wordbook')">
-          <uni-icons type="shop-filled" size="20" />
+          <uni-icons type="shop" size="20" />
           <text>单词本</text>
         </view>
         <view class="menu-item" @click="navigateTo('/pages/recycleBin/recycleBin')">
@@ -63,7 +63,8 @@ onUnmounted(() => {
 }
 
 .sidebar-header {
-  padding: 40rpx 30rpx;
+  margin-top: 150rpx;
+  padding: 50rpx 40rpx;
   font-size: 36rpx;
   font-weight: bold;
   border-bottom: 1rpx solid #eee;

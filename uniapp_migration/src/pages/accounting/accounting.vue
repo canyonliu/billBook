@@ -1,9 +1,6 @@
 <template>
+  <CustomNavBar />
   <view class="container">
-    <view class="menu-button" @click="onOpenSidebar">
-      <uni-icons type="bars" size="24" color="#6B59CC" />
-    </view>
-
     <view class="tips-floating">
       <view class="tips-icon" @click="onToggleTips">
         <uni-icons :type="tipsVisible ? 'closeempty' : 'info'" size="20" color="#fff" />
@@ -129,6 +126,7 @@ import { onShow } from '@dcloudio/uni-app';
 import * as util from '../../utils/util';
 import TransactionList from './components/TransactionList.vue';
 import GlobalSidebar from '../../components/GlobalSidebar.vue';
+import CustomNavBar from '../../components/CustomNavBar.vue';
 
 // --- Data --- 
 const activeTab = ref(0);
@@ -415,7 +413,7 @@ const onToggleTips = async () => {
 <style>
 /* pages/accounting/accounting.wxss */
 .container {
-  padding: 120rpx 0 0 0;
+  padding: 160rpx 0 0 0;
   background-color: #f7f8fa;
   min-height: 100vh;
 }
@@ -427,29 +425,15 @@ const onToggleTips = async () => {
   box-sizing: border-box;
 }
 
-.menu-button {
-  position: fixed;
-  top: 20rpx;
-  left: 20rpx;
-  z-index: 5;
-  background-color: #fff;
-  border-radius: 50%;
-  width: 80rpx;
-  height: 80rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
-}
-
 .tips-floating {
   position: fixed;
-  top: 20rpx;
+  bottom: 220rpx;
   right: 20rpx;
   z-index: 5;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  opacity: .5;
 }
 
 .tips-icon {

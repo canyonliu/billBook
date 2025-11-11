@@ -3,13 +3,15 @@
 		{
 			"path": "pages/accounting/accounting",
 			"style": {
-				"navigationBarTitleText": "记账本"
+				"navigationBarTitleText": "记账本",
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/wordbook/wordbook",
 			"style": {
-				"navigationBarTitleText": "单词本"
+				"navigationBarTitleText": "单词本",
+				"navigationStyle": "custom"
 			}
 		},
 		{

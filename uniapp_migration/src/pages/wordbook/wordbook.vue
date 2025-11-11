@@ -1,13 +1,9 @@
 <template>
+  <CustomNavBar />
   <view class="container">
     <!-- Banner -->
     <view class="banner-container" v-if="tips">
       <text class="banner-text">{{ tips }}</text>
-    </view>
-
-    <!-- Menu Button -->
-    <view v-if="!showSidebar" class="menu-button" @click="onOpenSidebar">
-      <uni-icons type="bars" size="24" color="#6B59CC" />
     </view>
 
     <view class="deck-list" v-if="decks.length > 0">
@@ -46,6 +42,7 @@ import { ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
 import * as util from '../../utils/util';
 import GlobalSidebar from '../../components/GlobalSidebar.vue';
+import CustomNavBar from '../../components/CustomNavBar.vue';
 
 const decks = ref<any[]>([]);
 const tips = ref<string>('');
@@ -148,7 +145,7 @@ const onSwipeCellClose = (e: any) => {
 <style>
 /* pages/index/index.wxss */
 .container {
-  padding: 0; /* Remove all padding from container */
+  padding: 160rpx 0 0 0;
 }
 
 /* Banner Styles */
@@ -164,22 +161,6 @@ const onSwipeCellClose = (e: any) => {
   color: #fff;
   font-size: 28rpx;
   text-align: center;
-}
-
-/* Menu Button */
-.menu-button {
-  position: fixed;
-  top: 20rpx;
-  left: 20rpx;
-  z-index: 1000; /* Ensure it's above other content */
-  background-color: #fff;
-  border-radius: 50%;
-  width: 80rpx;
-  height: 80rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
 }
 
 /* Make swipe cell full width */
