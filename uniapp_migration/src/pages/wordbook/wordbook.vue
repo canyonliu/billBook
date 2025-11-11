@@ -37,29 +37,7 @@
       <text>创建新卡片集</text>
     </button>
 
-    <!-- Sidebar Popup -->
-    <uni-popup ref="sidebarPopup" type="left">
-      <view class="sidebar-container">
-        <view class="sidebar-header">
-          <text>导航</text>
-        </view>
-        <view class="sidebar-menu">
-          <view class="menu-item" @click="navigateToAccountingFromSidebar">
-            <uni-icons type="wallet" size="20" />
-            <text>记账本</text>
-          </view>
-          <view class="menu-item" @click="navigateToStudyFromSidebar">
-            <uni-icons type="book" size="20" />
-            <text>单词本</text>
-          </view>
-          <view class="menu-item" @click="navigateToRecycleBinFromSidebar">
-            <uni-icons type="trash" size="20" />
-            <text>回收站</text>
-          </view>
-          <!-- Future menu items can be added here -->
-        </view>
-      </view>
-    </uni-popup>
+    <GlobalSidebar />
   </view>
 </template>
 
@@ -67,9 +45,9 @@
 import { ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
 import * as util from '../../utils/util';
+import GlobalSidebar from '../../components/GlobalSidebar.vue';
 
 const decks = ref<any[]>([]);
-const sidebarPopup = ref<any>(null);
 const tips = ref<string>('');
 
 const swipeActionOptions = ref([
@@ -158,37 +136,8 @@ const moveToRecycleBin = (deckId: string) => {
   }
 };
 
-// Sidebar related methods
 const onOpenSidebar = () => {
-  sidebarPopup.value.open('left');
-};
-
-const onCloseSidebar = () => {
-  sidebarPopup.value.close();
-};
-
-const navigateToRecycleBinFromSidebar = () => {
-  console.log('index.vue: navigateToRecycleBinFromSidebar triggered');
-  onCloseSidebar(); // Close sidebar first
-  uni.navigateTo({
-    url: '../recycleBin/recycleBin'
-  });
-};
-
-const navigateToStudyFromSidebar = () => {
-  console.log('index.vue: navigateToStudyFromSidebar triggered');
-  onCloseSidebar(); // Close sidebar first
-  uni.navigateTo({
-    url: '../study/study'
-  });
-};
-
-const navigateToAccountingFromSidebar = () => {
-  console.log('index.vue: navigateToAccountingFromSidebar triggered');
-  onCloseSidebar(); // Close sidebar first
-  uni.navigateTo({
-    url: '../accounting/accounting'
-  });
+  uni.$emit('open-sidebar');
 };
 
 const onSwipeCellClose = (e: any) => {
@@ -356,39 +305,5 @@ van-swipe-cell {
 
 .add-btn-icon {
   margin-right: 15rpx;
-}
-
-/* Sidebar Styles */
-.sidebar-container {
-  width: 70vw; /* Use vw for viewport width */
-  height: 100vh;
-  background-color: #fff;
-}
-
-.sidebar-header {
-  padding: 40rpx 30rpx;
-  font-size: 36rpx;
-  font-weight: bold;
-  border-bottom: 1rpx solid #eee;
-}
-
-.sidebar-menu {
-  padding: 20rpx 0;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  padding: 25rpx 30rpx;
-  font-size: 32rpx;
-  color: #333;
-}
-
-.menu-item .van-icon {
-  margin-right: 20rpx;
-}
-
-.menu-item:active {
-  background-color: #f5f5f5;
 }
 </style>

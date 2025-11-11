@@ -17,28 +17,6 @@
       </view>
     </view>
 
-    <uni-popup ref="sidebarPopup" type="left">
-      <view class="sidebar-container">
-        <view class="sidebar-header">
-          <text>导航</text>
-        </view>
-        <view class="sidebar-menu">
-          <view class="menu-item" @click="onCloseSidebar">
-            <uni-icons type="wallet" size="20" />
-            <text>记账本</text>
-          </view>
-          <view class="menu-item" @click="navigateToWordbook">
-            <uni-icons type="mail-open" size="20" />
-            <text>单词本</text>
-          </view>
-          <view class="menu-item" @click="navigateToRecycleBin">
-            <uni-icons type="trash" size="20" />
-            <text>回收站</text>
-          </view>
-        </view>
-      </view>
-    </uni-popup>
-
     <uni-segmented-control :current="activeTab" :values="['按日', '按月', '按年']" @clickItem="onTabChange" style-type="button" active-color="#6B59CC" class="segmented-control-wrapper" />
 
     <view class="content-area">
@@ -141,6 +119,7 @@
         <view class="year-picker-cancel" @click="onCloseYearActionSheet">取消</view>
       </view>
     </uni-popup>
+    <GlobalSidebar />
   </view>
 </template>
 
@@ -149,6 +128,7 @@ import { ref, computed, nextTick, onUnmounted } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
 import * as util from '../../utils/util';
 import TransactionList from './components/TransactionList.vue';
+import GlobalSidebar from '../../components/GlobalSidebar.vue';
 
 // --- Data --- 
 const activeTab = ref(0);
@@ -173,8 +153,6 @@ const maxDate = now.getTime();
 const yearPickerPopup = ref<any>(null);
 const yearActions = computed(() => Array.from({ length: 30 }, (_, i) => ({ name: String(new Date().getFullYear() - i) })));
 
-// --- Sidebar ---
-const sidebarPopup = ref<any>(null);
 
 // --- Tips ---
 const tipsVisible = ref(false);
@@ -378,25 +356,7 @@ const navigateToDetails = () => {
 };
 
 const onOpenSidebar = () => {
-  sidebarPopup.value?.open('left');
-};
-
-const onCloseSidebar = () => {
-  sidebarPopup.value?.close();
-};
-
-const navigateToWordbook = () => {
-  onCloseSidebar();
-  uni.navigateTo({
-    url: '../index/index'
-  });
-};
-
-const navigateToRecycleBin = () => {
-  onCloseSidebar();
-  uni.navigateTo({
-    url: '../recycleBin/recycleBin'
-  });
+  uni.$emit('open-sidebar');
 };
 
 const clearTipTimer = () => {
@@ -529,39 +489,6 @@ const onToggleTips = async () => {
   font-size: 26rpx;
   line-height: 1.5;
   opacity: 0.9;
-}
-
-.sidebar-container {
-  width: 70vw;
-  height: 100vh;
-  background-color: #fff;
-}
-
-.sidebar-header {
-  padding: 40rpx 30rpx;
-  font-size: 36rpx;
-  font-weight: bold;
-  border-bottom: 1rpx solid #eee;
-}
-
-.sidebar-menu {
-  padding: 20rpx 0;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  padding: 25rpx 30rpx;
-  font-size: 32rpx;
-  color: #333;
-}
-
-:deep(.menu-item .uni-icons) {
-  margin-right: 20rpx;
-}
-
-.menu-item:active {
-  background-color: #f5f5f5;
 }
 
 :deep(.segmented-control) {
