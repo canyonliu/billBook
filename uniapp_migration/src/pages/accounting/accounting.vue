@@ -28,7 +28,7 @@
             <text>记账本</text>
           </view>
           <view class="menu-item" @click="navigateToWordbook">
-            <uni-icons type="book" size="20" />
+            <uni-icons type="mail-open" size="20" />
             <text>单词本</text>
           </view>
           <view class="menu-item" @click="navigateToRecycleBin">
@@ -124,6 +124,7 @@
         :end="maxDate"
         @confirm="onPickerConfirm"
         @cancel="onCancelDatePicker"
+        @maskClick="onCancelDatePicker"
         ref="datePickerRef"
       />
     </uni-popup>
@@ -192,15 +193,15 @@ const TIPS_API = 'http://34.121.201.207/api/xcx/tips';
 
 // --- Icon Mapping ---
 const iconMap: { [key: string]: string } = {
-  '餐饮': 'food',
+  '餐饮': 'shop',
   '交通': 'paperplane',
   '购物': 'cart',
-  '娱乐': 'game-controller',
+  '娱乐': 'gift',
   '住房': 'home',
   '学习': 'book',
   '工资': 'wallet',
   '理财': 'medal',
-  'default': 'pricetag',
+  'default': 'info',
 };
 
 // --- Lifecycle ---
@@ -332,9 +333,6 @@ const onDisplayDatePicker = () => {
     yearPickerPopup.value.open();
   } else {
     datePickerPopup.value.open();
-    nextTick(() => {
-      datePickerRef.value?.show();
-    });
   }
 };
 
@@ -422,7 +420,8 @@ const fetchTips = () => new Promise<void>((resolve) => {
     method: 'GET',
     timeout: 5000,
     success: (res) => {
-      const tip = res.data?.data?.tip;
+      const anyRes: any = res;
+      const tip = anyRes?.data?.data?.tip;
       tipsContent.value = typeof tip === 'string' && tip ? tip : '暂无提示';
     },
     fail: () => {
@@ -472,7 +471,7 @@ const onToggleTips = async () => {
   position: fixed;
   top: 20rpx;
   left: 20rpx;
-  z-index: 100;
+  z-index: 5;
   background-color: #fff;
   border-radius: 50%;
   width: 80rpx;
@@ -487,7 +486,7 @@ const onToggleTips = async () => {
   position: fixed;
   top: 20rpx;
   right: 20rpx;
-  z-index: 100;
+  z-index: 5;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -500,14 +499,14 @@ const onToggleTips = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #6B59CC, #836FFF);
-  box-shadow: 0 8rpx 20rpx rgba(107, 89, 204, 0.3);
+  background: rgba(107, 89, 204, 0.85);
+  box-shadow: 0 8rpx 20rpx rgba(107, 89, 204, 0.25);
 }
 
 .tips-panel {
   margin-top: 12rpx;
   max-width: 420rpx;
-  background-color: rgba(36, 34, 60, 0.95);
+  background-color: rgba(36, 34, 60, 0.9);
   color: #fff;
   padding: 24rpx;
   border-radius: 16rpx;
