@@ -22,7 +22,7 @@ onHide(() => {
   console.log("App Hide");
 });
 </script>
-<style>
+<style scoped>
 /* app.wxss */
 .container {
   height: 100%;

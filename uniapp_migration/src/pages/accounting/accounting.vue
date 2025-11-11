@@ -118,7 +118,7 @@
     <!-- Date Picker Popup -->
     <uni-popup ref="datePickerPopup" type="bottom">
       <uni-datetime-picker
-        :type="filterType === 'day' ? 'date' : 'year-month'"
+        :type="filterType === 'day' ? 'date' : 'month'"
         :value="currentDate"
         :start="minDate"
         :end="maxDate"
@@ -192,15 +192,15 @@ const TIPS_API = 'http://34.121.201.207/api/xcx/tips';
 
 // --- Icon Mapping ---
 const iconMap: { [key: string]: string } = {
-  '餐饮': 'food-o',
-  '交通': 'logistics',
-  '购物': 'shopping-cart-o',
-  '娱乐': 'smile-o',
-  '住房': 'wap-home-o',
-  '学习': 'notes-o',
-  '工资': 'gold-coin-o',
-  '理财': 'balance-o',
-  'default': 'bill-o',
+  '餐饮': 'food',
+  '交通': 'paperplane',
+  '购物': 'cart',
+  '娱乐': 'game-controller',
+  '住房': 'home',
+  '学习': 'book',
+  '工资': 'wallet',
+  '理财': 'medal',
+  'default': 'pricetag',
 };
 
 // --- Lifecycle ---

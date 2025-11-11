@@ -10,22 +10,26 @@
           </view>
         </view>
         <view v-for="item in group.transactions" :key="item.id" class="transaction-card" @click="onEdit(item.id)">
-          <van-icon :name="item.icon" size="24px" class="card-icon" />
+          <uni-icons :type="item.icon" size="24" class="card-icon" color="#6B59CC" />
           <view class="card-content">
             <text class="item-desc">{{ item.description || '无描述' }}</text>
             <view class="tags-and-time">
-              <van-tag plain type="primary" v-for="(tag, tagIndex) in item.tagObjects" :key="tagIndex" custom-class="icon-tag">
-                <van-icon :name="tag.icon" />
-                <text class="tag-text">{{ tag.name }}</text>
-              </van-tag>
-              <van-tag plain type="default" custom-class="time-tag">{{ item.displayText }}</van-tag>
+              <uni-tag v-for="(tag, tagIndex) in item.tagObjects" :key="tagIndex" :text="tag.name" type="primary" size="small" class="icon-tag">
+                <template v-slot:icon>
+                  <uni-icons :type="tag.icon" size="14" color="#6B59CC" />
+                </template>
+              </uni-tag>
+              <uni-tag :text="item.displayText" type="default" size="small" class="time-tag" />
             </view>
           </view>
           <text class="card-amount" :class="item.type">{{ item.type === 'income' ? '+' : '-' }}{{ item.amount }}</text>
         </view>
       </view>
     </template>
-    <van-empty v-else description="暂无交易记录" />
+    <view v-else class="empty-state">
+      <uni-icons type="info" size="50" color="#bdc3c7" />
+      <text class="empty-text">暂无交易记录</text>
+    </view>
   </view>
 </template>
 
@@ -51,6 +55,20 @@ const onEdit = (id: string) => {
   padding: 20rpx;
   padding-top: 0;
   padding-bottom: 120rpx; /* Space for fixed button */
+}
+ 
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+  color: #999;
+}
+ 
+.empty-text {
+  font-size: 28rpx;
+  margin-top: 20rpx;
 }
 
 .transaction-group {
@@ -115,16 +133,7 @@ const onEdit = (id: string) => {
   gap: 10rpx;
 }
 
-.icon-tag {
-  display: flex;
-  align-items: center;
-  padding: 4rpx 12rpx !important; /* Adjust padding for icon */
-}
-
-.icon-tag .van-icon {
-  margin-right: 6rpx;
-  font-size: 24rpx !important;
-}
+.icon-tag { margin-right: 8rpx; }
 
 .tag-text {
   line-height: 1;

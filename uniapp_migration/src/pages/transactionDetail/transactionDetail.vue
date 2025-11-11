@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="segmented-control-container">
-      <uni-segmented-control :current="current" :values="items" @clickItem="onClickItem" styleType="button" activeColor="#6B59CC"></uni-segmented-control>
+      <uni-segmented-control :current="current" :values="items" @clickItem="onClickItem" styleType="button" activeColor="#6B59CC" class="segmented-control-wrapper"></uni-segmented-control>
     </view>
 
     <view class="content">
@@ -142,13 +142,35 @@ const onEditTransaction = (id: string) => {
   min-height: 100vh;
 }
 
+.segmented-control-wrapper {
+  width: 100%;
+}
+
 .segmented-control-container {
-  padding: 20rpx;
+  padding: 16rpx 20rpx;
   background-color: #fff;
 }
 
+/* 统一适配小程序端：直接覆盖内部类名 */
+.segmented-control-container .segmented-control {
+  width: 100%;
+}
+
+.segmented-control-container .segmented-control__item {
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.segmented-control-container .segmented-control__text {
+  font-size: 28rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .content {
-  margin-top: 20rpx;
+  margin-top: 12rpx;
 }
 
 .list-container {
@@ -216,7 +238,7 @@ const onEditTransaction = (id: string) => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 100rpx;
+  padding: 80rpx 0;
   color: #999;
 }
 
