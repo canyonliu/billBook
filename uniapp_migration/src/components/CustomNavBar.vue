@@ -100,12 +100,14 @@ onShow(() => {
 }
 
 .navbar-title {
+  margin: 30rpx 20rpx 0 0;
   font-size: 34rpx;
   font-weight: bold;
   color: #fff;
 }
 
 .menu-button {
+  margin-top: 30rpx;
   width: 80rpx;
   height: 80rpx;
   border-radius: 50%;
