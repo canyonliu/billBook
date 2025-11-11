@@ -1,6 +1,45 @@
 <template>
   <view class="container">
-    <uni-segmented-control :current="activeTab" :values="['按日', '按月', '按年']" @clickItem="onTabChange" style-type="button" active-color="#6B59CC" class="segmented-control" />
+    <view class="menu-button" @click="onOpenSidebar">
+      <uni-icons type="bars" size="24" color="#6B59CC" />
+    </view>
+
+    <view class="tips-floating">
+      <view class="tips-icon" @click="onToggleTips">
+        <uni-icons :type="tipsVisible ? 'closeempty' : 'info'" size="20" color="#fff" />
+      </view>
+      <view v-if="tipsVisible" class="tips-panel" @click.stop="onHideTips">
+        <view class="tips-panel-header">
+          <text class="tips-title">小贴士</text>
+          <uni-icons type="closeempty" size="18" color="#fff" />
+        </view>
+        <text class="tips-text">{{ tipsDisplay }}</text>
+      </view>
+    </view>
+
+    <uni-popup ref="sidebarPopup" type="left">
+      <view class="sidebar-container">
+        <view class="sidebar-header">
+          <text>导航</text>
+        </view>
+        <view class="sidebar-menu">
+          <view class="menu-item" @click="onCloseSidebar">
+            <uni-icons type="wallet" size="20" />
+            <text>记账本</text>
+          </view>
+          <view class="menu-item" @click="navigateToWordbook">
+            <uni-icons type="book" size="20" />
+            <text>单词本</text>
+          </view>
+          <view class="menu-item" @click="navigateToRecycleBin">
+            <uni-icons type="trash" size="20" />
+            <text>回收站</text>
+          </view>
+        </view>
+      </view>
+    </uni-popup>
+
+    <uni-segmented-control :current="activeTab" :values="['按日', '按月', '按年']" @clickItem="onTabChange" style-type="button" active-color="#6B59CC" class="segmented-control-wrapper" />
 
     <view class="content-area">
       <view v-show="activeTab === 0">
@@ -85,6 +124,7 @@
         :end="maxDate"
         @confirm="onPickerConfirm"
         @cancel="onCancelDatePicker"
+        ref="datePickerRef"
       />
     </uni-popup>
 
@@ -104,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick, onUnmounted } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
 import * as util from '../../utils/util';
 import TransactionList from './components/TransactionList.vue';
@@ -126,10 +166,22 @@ const currentDate = ref(now.getTime());
 
 // --- Picker Related Data ---
 const datePickerPopup = ref<any>(null);
+const datePickerRef = ref<any>(null);
 const minDate = new Date(2000, 0, 1).getTime();
 const maxDate = now.getTime();
 const yearPickerPopup = ref<any>(null);
 const yearActions = computed(() => Array.from({ length: 30 }, (_, i) => ({ name: String(new Date().getFullYear() - i) })));
+
+// --- Sidebar ---
+const sidebarPopup = ref<any>(null);
+
+// --- Tips ---
+const tipsVisible = ref(false);
+const tipsContent = ref('');
+const tipLoading = ref(false);
+const tipsDisplay = computed(() => tipLoading.value ? '加载中...' : (tipsContent.value || '暂无提示'));
+let tipTimer: ReturnType<typeof setTimeout> | null = null;
+const TIPS_API = 'http://34.121.201.207/api/xcx/tips';
 
 // const formatter = (type: string, value: string) => {
 //   if (type === 'year') return `${value}年`;
@@ -151,11 +203,16 @@ const iconMap: { [key: string]: string } = {
   'default': 'bill-o',
 };
 
-// --- Methods ---
+// --- Lifecycle ---
 onShow(() => {
   loadTransactions();
 });
 
+onUnmounted(() => {
+  clearTipTimer();
+});
+
+// --- Methods ---
 const loadTransactions = () => {
   const allData = util.loadData();
   transactions.value = allData.transactions || [];
@@ -275,6 +332,9 @@ const onDisplayDatePicker = () => {
     yearPickerPopup.value.open();
   } else {
     datePickerPopup.value.open();
+    nextTick(() => {
+      datePickerRef.value?.show();
+    });
   }
 };
 
@@ -284,9 +344,10 @@ const onCloseYearActionSheet = () => {
 
 const onSelectYear = (action: any) => {
   const selectedYear = action.name;
-  const selectedDate = new Date(selectedYear, 0, 1);
+  const yearNumber = Number(selectedYear);
+  const selectedDate = new Date(yearNumber, 0, 1);
   currentDate.value = selectedDate.getTime();
-  currentYear.value = selectedYear;
+  currentYear.value = yearNumber;
   yearPickerPopup.value.close();
   calculateTotals();
 };
@@ -318,19 +379,204 @@ const navigateToDetails = () => {
   uni.navigateTo({ url });
 };
 
+const onOpenSidebar = () => {
+  sidebarPopup.value?.open('left');
+};
+
+const onCloseSidebar = () => {
+  sidebarPopup.value?.close();
+};
+
+const navigateToWordbook = () => {
+  onCloseSidebar();
+  uni.navigateTo({
+    url: '../index/index'
+  });
+};
+
+const navigateToRecycleBin = () => {
+  onCloseSidebar();
+  uni.navigateTo({
+    url: '../recycleBin/recycleBin'
+  });
+};
+
+const clearTipTimer = () => {
+  if (tipTimer) {
+    clearTimeout(tipTimer);
+    tipTimer = null;
+  }
+};
+
+const startTipAutoHide = () => {
+  clearTipTimer();
+  tipTimer = setTimeout(() => {
+    onHideTips();
+  }, 3000);
+};
+
+const fetchTips = () => new Promise<void>((resolve) => {
+  tipLoading.value = true;
+  uni.request({
+    url: TIPS_API,
+    method: 'GET',
+    timeout: 5000,
+    success: (res) => {
+      const tip = res.data?.data?.tip;
+      tipsContent.value = typeof tip === 'string' && tip ? tip : '暂无提示';
+    },
+    fail: () => {
+      tipsContent.value = '网络异常，请稍后重试';
+    },
+    complete: () => {
+      tipLoading.value = false;
+      resolve();
+    }
+  });
+});
+
+const onHideTips = () => {
+  clearTipTimer();
+  tipsVisible.value = false;
+};
+
+const onToggleTips = async () => {
+  if (tipsVisible.value) {
+    onHideTips();
+    return;
+  }
+  tipsVisible.value = true;
+  await fetchTips();
+  if (tipsVisible.value) {
+    startTipAutoHide();
+  }
+};
 </script>
 
 <style>
 /* pages/accounting/accounting.wxss */
 .container {
-  padding: 0;
+  padding: 120rpx 0 0 0;
   background-color: #f7f8fa;
   min-height: 100vh;
 }
 
-.segmented-control {
+.segmented-control-wrapper {
   width: 100%;
-  margin: 20rpx 0;
+  margin: 0 auto 20rpx;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+}
+
+.menu-button {
+  position: fixed;
+  top: 20rpx;
+  left: 20rpx;
+  z-index: 100;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+}
+
+.tips-floating {
+  position: fixed;
+  top: 20rpx;
+  right: 20rpx;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.tips-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6B59CC, #836FFF);
+  box-shadow: 0 8rpx 20rpx rgba(107, 89, 204, 0.3);
+}
+
+.tips-panel {
+  margin-top: 12rpx;
+  max-width: 420rpx;
+  background-color: rgba(36, 34, 60, 0.95);
+  color: #fff;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 12rpx 30rpx rgba(0,0,0,0.15);
+}
+
+.tips-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.tips-title {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.tips-text {
+  font-size: 26rpx;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.sidebar-container {
+  width: 70vw;
+  height: 100vh;
+  background-color: #fff;
+}
+
+.sidebar-header {
+  padding: 40rpx 30rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+  border-bottom: 1rpx solid #eee;
+}
+
+.sidebar-menu {
+  padding: 20rpx 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 25rpx 30rpx;
+  font-size: 32rpx;
+  color: #333;
+}
+
+:deep(.menu-item .uni-icons) {
+  margin-right: 20rpx;
+}
+
+.menu-item:active {
+  background-color: #f5f5f5;
+}
+
+:deep(.segmented-control) {
+  width: 100%;
+}
+
+:deep(.segmented-control__item) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+:deep(.segmented-control__text) {
+  font-size: 30rpx;
+  white-space: nowrap;
 }
 
 .sticky-top {
