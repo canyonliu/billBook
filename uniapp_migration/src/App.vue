@@ -3,7 +3,7 @@ import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 onLaunch(() => {
   console.log("App Launch");
   uni.request({
-    url: 'http://34.121.201.207/api/xcx/tips',
+    url: `${import.meta.env.VITE_APP_API_HOST}/api/xcx/tips`,
     success: (res: any) => {
       if (res.data && res.data.data && res.data.data.tip) {
         console.log('API success:', res.data.data.tip);

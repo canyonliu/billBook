@@ -158,7 +158,7 @@ const tipsContent = ref('');
 const tipLoading = ref(false);
 const tipsDisplay = computed(() => tipLoading.value ? '加载中...' : (tipsContent.value || '暂无提示'));
 let tipTimer: ReturnType<typeof setTimeout> | null = null;
-const TIPS_API = 'http://34.121.201.207/api/xcx/tips';
+const TIPS_API = `${import.meta.env.VITE_APP_API_HOST}/api/xcx/tips`;
 
 // const formatter = (type: string, value: string) => {
 //   if (type === 'year') return `${value}年`;
