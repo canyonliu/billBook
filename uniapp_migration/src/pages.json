@@ -32,7 +32,7 @@
 	],
 	"globalStyle": {
 		"backgroundTextStyle": "light",
-		"navigationBarBackgroundColor": "#6B59CC",
+		"navigationBarBackgroundColor": "#5B59b1",
 		"navigationBarTitleText": "闪卡记",
 		"navigationBarTextStyle": "white"
 	},

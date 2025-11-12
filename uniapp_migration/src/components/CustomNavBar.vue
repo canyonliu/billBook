@@ -68,7 +68,7 @@ onShow(() => {
   right: 0;
   height: 130rpx; /* Standard navigation bar height */
   padding-top: var(--status-bar-height); /* Push content below status bar */
-  background-color: #6B59CC;
+  background-color: #5B59b1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -100,7 +100,7 @@ onShow(() => {
 }
 
 .navbar-title {
-  margin: 30rpx 20rpx 0 0;
+  margin: 30rpx  0 0 -60rpx;
   font-size: 34rpx;
   font-weight: bold;
   color: #fff;

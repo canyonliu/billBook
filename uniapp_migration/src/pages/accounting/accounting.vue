@@ -122,7 +122,7 @@
 
 <script setup lang="ts">
 import { ref, computed, nextTick, onUnmounted } from 'vue';
-import { onShow } from '@dcloudio/uni-app';
+import { onShow, onShareAppMessage } from '@dcloudio/uni-app';
 import * as util from '../../utils/util';
 import TransactionList from './components/TransactionList.vue';
 import GlobalSidebar from '../../components/GlobalSidebar.vue';
@@ -187,6 +187,15 @@ onShow(() => {
 
 onUnmounted(() => {
   clearTipTimer();
+});
+
+// Share hook for WeChat Mini Program
+onShareAppMessage((res: any) => {
+  return {
+    title: 'canyonliu功能集 - 轻松管理你的财务', // Customize share title
+    path: '/pages/accounting/accounting', // Path to the current page
+    imageUrl: '/static/logo.png' // Path to a share image (e.g., your app's logo)
+  };
 });
 
 // --- Methods ---
